@@ -8,16 +8,9 @@ import 'package:management/screens/member_overview/profile.dart';
 import 'package:management/screens/member_overview/work_life_cycle.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
-import 'package:system_theme/system_theme.dart';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_strategy/url_strategy.dart';
-
-import 'screens/colors.dart';
-import 'screens/forms.dart';
 import 'screens/management/management_zone.dart';
 import 'screens/inputs.dart';
 import 'screens/mobile.dart';
@@ -54,8 +47,9 @@ class MyApp extends StatelessWidget {
             title: AppConfig.of(context)!.buildFlavor,
             themeMode: appTheme.mode,
             debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {'/': (_) => const MyHomePage()},
+            initialRoute: '/profile',
+            routes: {
+              '/profile': (_) => const MyHomePage()},
             color: appTheme.color,
             darkTheme: ThemeData(
               brightness: Brightness.dark,

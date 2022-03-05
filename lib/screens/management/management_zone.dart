@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../Models/management_zone_model.dart';
 import '../../components/custom_grid_tabs.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ManageSOS extends StatefulWidget {
   const ManageSOS({Key? key}) : super(key: key);
@@ -40,16 +43,21 @@ class _ManageSOSState extends State<ManageSOS> {
           'You can click on any icon to copy its name to the clipboard!',
         ),
       ),
-      content: GridView.extent(
-        maxCrossAxisExtent: 150,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        padding: EdgeInsets.only(
-          top: kPageDefaultVerticalPadding,
-          right: padding,
-          left: padding,
-        ),
-        children: managemntZoneDataModel
+      content: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.doc('users_folder/folder').snapshots() ,
+        builder: (context, snapshot) {
+          return GridView.extent(
+            maxCrossAxisExtent: 150,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            padding: EdgeInsets.only(
+              top: kPageDefaultVerticalPadding,
+              right: padding,
+              left: padding,
+            ),
+            children: managemntZoneDataModel
+          );
+        }
       ),
     );
   }
