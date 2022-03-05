@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:system_theme/system_theme.dart';
 import 'resources/app_config.dart';
 import 'main.dart';
-import 'package:window_manager/window_manager.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
-import 'package:system_theme/system_theme.dart';
-
-import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
-import 'package:url_strategy/url_strategy.dart';
 
 
 void main() async{
@@ -19,24 +14,11 @@ void main() async{
     SystemTheme.accentInstance;
   }
 
-  setPathUrlStrategy();
 
-  if (isDesktop) {
-    await flutter_acrylic.Window.initialize();
-    await WindowManager.instance.ensureInitialized();
-    windowManager.waitUntilReadyToShow().then((_) async {
-      await windowManager.setTitleBarStyle('hidden');
-      await windowManager.setSize(const Size(755, 545));
-      await windowManager.setMinimumSize(const Size(755, 545));
-      await windowManager.center();
-      await windowManager.show();
-      await windowManager.setSkipTaskbar(false);
-    });
-  }
   var configuredApp = AppConfig(
     appTitle: "Flutter Flavors",
     buildFlavor: "Production",
-    child: const MyApp(),
+    child: MyApp(),
   );
   return runApp(configuredApp);
 }
