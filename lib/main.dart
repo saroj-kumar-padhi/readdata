@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:go_router/go_router.dart';
+import 'package:management/app/modules/management/view/pandit_user_details.dart';
 import 'package:management/resources/app_strings.dart';
 import 'app/modules/home/view/home_view.dart';
 import 'app/modules/management/view/client_users_list.dart';
@@ -45,36 +46,16 @@ class MyApp extends StatelessWidget {
                       builder: (BuildContext context, GoRouterState state) {                      
                         return PanditUserList();
                       },
+                      
                     ),
+                    GoRoute(
+                              path: 'pandit_users/:id',
+                              builder: (BuildContext context, GoRouterState state) {                      
+                                return PanditUserDetails(id: state.params['id']!,);
+                              })
         ]
             ),
-
-
-      /*GoRoute(
-        path: '/home/:fid',
-        builder: (BuildContext context, GoRouterState state) =>
-            HomeView(
-              key: state.pageKey,
-              selectedFamily: Families.family(state.params['fid']!),
-            ),
-        routes: <GoRoute>[
-          GoRoute(
-            path: 'person/:pid',
-            builder: (BuildContext context, GoRouterState state) {
-              final Family family = Families.family(state.params['fid']!);
-              final Person person = family.person(state.params['pid']!);
-
-              return PersonScreen(family: family, person: person);
-            },
-          ),
-        ],
-      ),*/
     ],
-
-    // show the current router location as the user navigates page to page; note
-    // that this is not required for nested navigation but it is useful to show
-    // the location as it changes
-
   );
 }
 

@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:management/resources/responshive.dart';
+
+import '../../../../resources/app_strings.dart';
 
 class PanditUserList extends StatefulWidget{
   @override
@@ -62,15 +65,24 @@ class _PanditUserListState extends State<PanditUserList> {
       _foundUsers = results;
     });
   }
-
+  void fetchPandits()async{
+    FirebaseFirestore.instance.collection('users_folder/folder/pandit_users').orderBy("pandit_joining_date",descending: true).limit(limit).get().then((value) {
+      value.docs.forEach((element) {
+        _allUsers.add({
+                    'id':'${element.get('pandit_uid')}','name':'${element.get('pandit_name')}','age':element.get('pandit_age'),'state':element.get('pandit_state'),
+                    'number':element.get('pandit_mobile_number')??'','verification':element.get('pandit_verification_status')??'','image':element.get('pandit_display_profile'),
+                  });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
    return Scaffold(     
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('users_folder/folder/pandit_users').orderBy("pandit_joining_date",descending: true).limit(limit).snapshots(),          
+        child: FutureBuilder<QuerySnapshot>(
+          future: FirebaseFirestore.instance.collection('users_folder/folder/pandit_users').orderBy("pandit_joining_date",descending: true).limit(limit).get(),          
           builder: (context, snapshot) {
             if(snapshot.data!=null){                          
                 snapshot.data!.docs.forEach((element) {
@@ -89,7 +101,8 @@ class _PanditUserListState extends State<PanditUserList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                     TextButton.icon(onPressed: (){
+                     TextButton(onPressed: (){
+                        _allUsers.clear();
                       if(location ==true){
                         setState(() {
                           location = false;
@@ -98,13 +111,16 @@ class _PanditUserListState extends State<PanditUserList> {
                       setState(() {
                         location = true;
                       });
-                    }, icon: Icon(LineIcons.search), label: Text( location?"Search by name":"Search by state")),
+                    }, child: Text( location?"Search by name":"Search by state",style: TextStyle(color: !Get.isDarkMode?Colors.white:Colors.black54))),
                      SizedBox(width: 10,),
-                    TextButton.icon(onPressed: (){
+                    TextButton(
+                      
+                      onPressed: (){
+                        _foundUsers.clear();
                       setState(() {
                         limit = limit+10;
                       });
-                    }, icon: Icon(LineIcons.plus), label: Text("Icrement by 10")),
+                    }, child: Text("Icrement by 10",style: TextStyle(color: !Get.isDarkMode?Colors.white:Colors.black54))),
                     SizedBox(width: 10,),
                     SizedBox(
                       width: 200,
@@ -128,34 +144,40 @@ class _PanditUserListState extends State<PanditUserList> {
                               mainAxisSpacing: 4.0  
                           ),                                         
                           itemCount: _foundUsers.length,
-                          itemBuilder: (context, index) => Card(
-                            key: ValueKey(_foundUsers[index]["id"]),                       
-                            elevation: 4,
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(5),
-                              leading: CircleAvatar(
-                                maxRadius: 25,
-                                backgroundImage: NetworkImage(_foundUsers[index]["image"]),
-                              ),
-                              isThreeLine: true,
-                              title: Text(_foundUsers[index]['name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      'Age: ${_foundUsers[index]["age"].toString()} years old'),
-                                      SizedBox(height: 5,),
-                                       Text(
-                                      'Number: ${_foundUsers[index]["number"].toString()}'),
-                                      SizedBox(height: 5,),
-                                       Text(
-                                      'Verification: ${_foundUsers[index]["verification"].toString()}'),
-                                      SizedBox(height: 5,),
-                                       Text(
-                                      'State: ${_foundUsers[index]["state"].toString()}'),
-
-                                ],
+                          itemBuilder: (context, index) => InkWell(
+                            hoverColor: Colors.transparent,
+                            onTap: (){
+                              context.go('/home/${AppStrings.MANAGEMENT }/pandit_users/${_foundUsers[index]["id"]}');
+                            },
+                            child: Card(
+                              key: ValueKey(_foundUsers[index]["id"]),                       
+                              elevation: 4,
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.all(5),
+                                leading: CircleAvatar(
+                                  maxRadius: 25,
+                                  backgroundImage: NetworkImage(_foundUsers[index]["image"]),
+                                ),
+                                isThreeLine: true,
+                                title: Text(_foundUsers[index]['name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        'Age: ${_foundUsers[index]["age"].toString()} years old'),
+                                        SizedBox(height: 5,),
+                                         Text(
+                                        'Number: ${_foundUsers[index]["number"].toString()}'),
+                                        SizedBox(height: 5,),
+                                         Text(
+                                        'Verification: ${_foundUsers[index]["verification"].toString()}'),
+                                        SizedBox(height: 5,),
+                                         Text(
+                                        'State: ${_foundUsers[index]["state"].toString()}'),
+                          
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -167,6 +189,7 @@ class _PanditUserListState extends State<PanditUserList> {
                 ),
               ],
             );
+          
           }
         ),
       ),
