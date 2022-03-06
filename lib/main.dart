@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     GetMaterialApp(     
       debugShowCheckedModeBanner: false,
       theme: Themes.light,
-      //darkTheme: Themes.dark,
+      darkTheme: Themes.dark,
       initialRoute: '/home/${AppStrings.CONTENT_ENTRY}',
       getPages: [
           GetPage(name: '/home/:tab', page: ()=>HomeView(),

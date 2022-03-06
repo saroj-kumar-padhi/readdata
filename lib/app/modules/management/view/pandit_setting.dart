@@ -50,26 +50,19 @@ class PanditSetting extends StatelessWidget{
         children: [
           InkWell(
             onTap: (){
-              showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: const Text("Are you sure you want to delete ?"),
-      content: Text("Pandit Name : ${query.data!['pandit_name']}\nYour id will be captured"),
-      actions: <Widget>[
-         TextButton(
-          child: new Text("OK"),
-          onPressed: () async{
-           await FirebaseFirestore.instance.doc(query.data!['pandit_uid']).delete();
-           Navigator.pop(context);
-           
-           
-          },
-        ),
-      ],
-    );
-  },
-);
+              Get.defaultDialog(
+                contentPadding: EdgeInsets.all(20),
+                title: "Warning",
+                content: Text("Are you sure you want to remove ${query.data!['pandit_name']} ?"),
+                // confirm: Text("Confirm"),
+                // cancel:  Text("Cancel"),
+                onConfirm: (){
+                  FirebaseFirestore.instance.doc('users_folder/folder/pandit_users/${query.data!['pandit_uid']}').delete();
+                  Get.back();
+                  Get.back();
+                },
+                onCancel: (){Get.back();}
+              );
             },
             child: Container(
               padding: const EdgeInsets.all(10),
