@@ -4,7 +4,7 @@ import '../app_exports.dart';
 import '../responshive.dart';
 
 class MenuBarTile extends StatelessWidget{
-  const MenuBarTile({Key? key,required this.tab, required this.selectedTab, this.onTap,required this.iconData,required this.titleText}) : super(key: key);
+const MenuBarTile({Key? key,required this.tab, required this.selectedTab, this.onTap,required this.iconData,required this.titleText}) : super(key: key);
 final String selectedTab;
 final VoidCallback? onTap;
 final IconData iconData;
