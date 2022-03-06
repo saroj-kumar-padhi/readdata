@@ -92,9 +92,8 @@ class PanditUserDetails extends StatelessWidget{
                 padding: const EdgeInsets.only(top: 60.0, left: 20, right: 20),
                 child: Row(
                   children: [
-                    Container(
-                      height: height,
-                      width: width / 6,
+                    Expanded(
+                      flex: 1,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -108,7 +107,7 @@ class PanditUserDetails extends StatelessWidget{
                                   fit: BoxFit.fill
                                 )),
                           ),
-                          SizedBox(
+                         const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -119,33 +118,33 @@ class PanditUserDetails extends StatelessWidget{
                                     style: TextStyle(fontSize: 20),
                                     autofocus: true,
                                   )),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5,
                               ),
                               snapshot.data!.get('pandit_verification_status')!
-                                  ? Icon(
+                                  ? const Icon(
                                 Icons.verified,
                                
                                 size: 14,
                               )
-                                  : Icon(
+                                  : const Icon(
                                 Icons.verified,
                                 color: Colors.grey,
                                 size: 12,
                               )
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
                             children: [
-                              Icon(
+                             const  Icon(
                                 Icons.location_history,
                                
                                 size: 14,
                               ),
-                              SizedBox(
+                            const  SizedBox(
                                 width: 5,
                               ),
                               Expanded(
@@ -197,25 +196,20 @@ class PanditUserDetails extends StatelessWidget{
                         ],
                       ),
                     ),
-                    SizedBox(
-                      width: 40,
-                    ),
-                    Column(
-                      children: [
-                        Container(                          
-                          width: width * 0.7,
-                          height: height * 0.8,
-                          child: TabBarView(                            
-                            children: [                              
-                              PujaOffering(asyncSnapshot: snapshot),
-                              Icon(Icons.account_balance_wallet),
-                              Gallery(query: snapshot,galaryImages: snapshot.data!['pandit_pictures']??[],),
-                              Icon(Icons.directions_bike),
-                              PanditSetting(query: snapshot),
-                            ],
-                          ),
-                        )
-                      ],
+                    // SizedBox(
+                    //   width: 40,
+                    // ),
+                    Expanded(
+                      flex: 4,
+                      child: TabBarView(                            
+                        children: [                              
+                          PujaOffering(asyncSnapshot: snapshot),
+                          Icon(Icons.account_balance_wallet),
+                          Gallery(query: snapshot,galaryImages: snapshot.data!['pandit_pictures']??[],),
+                          Icon(Icons.directions_bike),
+                          PanditSetting(query: snapshot),
+                        ],
+                      ),
                     )
                   ],
                 ),
