@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:management/app/modules/content_entry/view/add_update_puja.dart';
 import 'package:management/app/modules/management/view/pandit_user_details.dart';
 import 'package:management/resources/app_strings.dart';
 import 'app/modules/home/view/home_view.dart';
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
            children: [
              GetPage(name: '/:id', page: ()=>PanditUserDetails(),)
            ]
-           )
+           ),
+            GetPage(name: '/update_puja/:tab', page: ()=>AddUpdatePuja(),                      
+           ),
           ]
           )
       ],
