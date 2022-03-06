@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:management/resources/responshive.dart';
 
 import '../../../../resources/app_strings.dart';
@@ -111,7 +109,7 @@ class _PanditUserListState extends State<PanditUserList> {
                       setState(() {
                         location = true;
                       });
-                    }, child: Text( location?"Search by name":"Search by state",style: TextStyle(color: !Get.isDarkMode?Colors.white:Colors.black54))),
+                    }, child: Text( location?"Search by name":"Search by state",style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black54))),
                      SizedBox(width: 10,),
                     TextButton(
                       
@@ -120,7 +118,7 @@ class _PanditUserListState extends State<PanditUserList> {
                       setState(() {
                         limit = limit+10;
                       });
-                    }, child: Text("Icrement by 10",style: TextStyle(color: !Get.isDarkMode?Colors.white:Colors.black54))),
+                    }, child: Text("Icrement by 10",style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black54))),
                     SizedBox(width: 10,),
                     SizedBox(
                       width: 200,
@@ -146,8 +144,8 @@ class _PanditUserListState extends State<PanditUserList> {
                           itemCount: _foundUsers.length,
                           itemBuilder: (context, index) => InkWell(
                             hoverColor: Colors.transparent,
-                            onTap: (){
-                              context.go('/home/${AppStrings.MANAGEMENT }/pandit_users/${_foundUsers[index]["id"]}');
+                            onTap: (){                            
+                              Get.toNamed('/home/${AppStrings.MANAGEMENT}/pandit_users/${_foundUsers[index]["id"]}');
                             },
                             child: Card(
                               key: ValueKey(_foundUsers[index]["id"]),                       

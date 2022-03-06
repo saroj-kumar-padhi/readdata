@@ -10,9 +10,9 @@ import 'pandit_puja_offering.dart';
 import 'pandit_setting.dart';
 
 class PanditUserDetails extends StatelessWidget{
-  final String id;
+ String id = Get.parameters['id']!;
 
-  const PanditUserDetails({Key? key,required this.id}) : super(key: key);
+  PanditUserDetails({Key? key,}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     double height = Get.height;
@@ -40,13 +40,14 @@ class PanditUserDetails extends StatelessWidget{
                 actions: [
                   TabBar(
                     labelStyle: GoogleFonts.aBeeZee(color:Colors.white),
-                    labelColor: !Get.isDarkMode?Colors.white:Colors.black54,
+                    labelColor: Get.isDarkMode?Colors.white:Colors.black54,                  
                     indicatorColor: Colors.orangeAccent,
                     isScrollable: true,
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicator:BubbleTabIndicator(
+                      
                        indicatorHeight: 25.0,
-                        indicatorColor: Get.isDarkMode?Colors.white:Colors.black54,
+                        indicatorColor: !Get.isDarkMode?Colors.white:Colors.black54,
                         tabBarIndicatorSize: TabBarIndicatorSize.tab,
                         // Other flags
                         // indicatorRadius: 1,
@@ -115,7 +116,7 @@ class PanditUserDetails extends StatelessWidget{
                               Expanded(
                                   child: SelectableText(
                                     '${snapshot.data!.get('pandit_name')}',
-                                    style: TextStyle(fontSize: 20, color: Colors.black),
+                                    style: TextStyle(fontSize: 20),
                                     autofocus: true,
                                   )),
                               SizedBox(
@@ -124,7 +125,7 @@ class PanditUserDetails extends StatelessWidget{
                               snapshot.data!.get('pandit_verification_status')!
                                   ? Icon(
                                 Icons.verified,
-                                color: Colors.orangeAccent,
+                               
                                 size: 14,
                               )
                                   : Icon(
@@ -141,7 +142,7 @@ class PanditUserDetails extends StatelessWidget{
                             children: [
                               Icon(
                                 Icons.location_history,
-                                color: Colors.orangeAccent,
+                               
                                 size: 14,
                               ),
                               SizedBox(

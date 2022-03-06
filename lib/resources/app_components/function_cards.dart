@@ -14,10 +14,11 @@ class FunctionCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      hoverColor: Colors.transparent,
+      //hoverColor: Colors.white38,
       onTap: ontap,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+        margin: EdgeInsets.all(10),
+        //margin: const EdgeInsets.fromLTRB(20, 0, 0, 20),
         height: ResponsiveWidget.isSmallScreen(context)?70:150,
         width: ResponsiveWidget.isSmallScreen(context)?70:150,
         decoration: BoxDecoration(

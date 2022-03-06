@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:management/app/modules/content_entry/view/content_entry_view.dart';
 import 'package:management/resources/app_exports.dart';
 import 'package:line_icons/line_icons.dart';
@@ -8,8 +7,8 @@ import 'package:management/resources/responshive.dart';
 
 import '../../management/view/user_management_view.dart';
 class HomeView extends StatelessWidget{
-  HomeView({Key? key, required this.tab}) : super(key: key);
-  late String tab;
+  HomeView({Key? key,}) : super(key: key);
+  String tab = Get.parameters['tab']!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +59,14 @@ class HomeView extends StatelessWidget{
 
   ListTile leftTile(BuildContext context,String navigationTab,text,IconData iconData) {
     return ListTile(
-                        selected: tab==navigationTab,                        
-                        selectedColor: Get.isDarkMode ? Colors.white:Colors.white54,
-                        onTap: (){
-                          context.go('/home/$navigationTab');
+                        selected: tab==navigationTab,  
+                        textColor: Get.isDarkMode ? Colors.white54:Colors.black54 ,                      
+                        selectedColor: Get.isDarkMode ? Colors.white:Colors.black,
+                        onTap: (){                          
+                          Get.toNamed('/home/$navigationTab');
                         },
-                        leading: Icon(iconData),
+                        iconColor:  Get.isDarkMode ? Colors.white54:Colors.black54,
+                        leading: Icon(iconData,),
                         title:ResponsiveWidget.isLargeScreen(context)?Text("$text"):null,
                       );
   }
