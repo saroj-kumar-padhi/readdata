@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:management/resources/responshive.dart';
 
+import '../../../../resources/app_components/custom_searchable_dropdown.dart';
 import '../../../../resources/app_strings.dart';
+import '../models/pandit_users_model.dart';
 
 class PanditUserList extends StatefulWidget{
   @override
@@ -13,67 +15,6 @@ class PanditUserList extends StatefulWidget{
 class _PanditUserListState extends State<PanditUserList> {
   int limit = 20;
   bool location = false;
-  final List<Map<String, dynamic>> _allUsers = [
-   
-  ];
-
-  List<Map<String, dynamic>> _foundUsers = [];
-  @override
-  initState() {
-    // at the beginning, all users are shown
-    _foundUsers = _allUsers;
-    super.initState();
-  }
-
-  // This function is called whenever the text field changes
-  void _runFilterName(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
-      results = _allUsers;
-    } else {
-      results = _allUsers
-          .where((user) =>
-              user["name"].toLowerCase().contains(enteredKeyword.toLowerCase()) && user['age']>30)
-          .toList();
-      // we use the toLowerCase() method to make it case-insensitive
-    }
-
-    // Refresh the UI
-    setState(() {
-      _foundUsers = results;
-    });
-  }
-
-   void _runFilterLocation(String enteredKeyword) {
-    List<Map<String, dynamic>> results = [];
-    if (enteredKeyword.isEmpty) {
-      // if the search field is empty or only contains white-space, we'll display all users
-      results = _allUsers;
-    } else {
-      results = _allUsers
-          .where((user) =>
-              user["state"].toLowerCase().contains(enteredKeyword.toLowerCase()))
-          .toList();
-      // we use the toLowerCase() method to make it case-insensitive
-    }
-
-    // Refresh the UI
-    setState(() {
-      _foundUsers = results;
-    });
-  }
-  void fetchPandits()async{
-    FirebaseFirestore.instance.collection('users_folder/folder/pandit_users').orderBy("pandit_joining_date",descending: true).limit(limit).get().then((value) {
-      value.docs.forEach((element) {
-        _allUsers.add({
-                    'id':'${element.get('pandit_uid')}','name':'${element.get('pandit_name')}','age':element.get('pandit_age'),'state':element.get('pandit_state'),
-                    'number':element.get('pandit_mobile_number')??'','verification':element.get('pandit_verification_status')??'','image':element.get('pandit_display_profile'),
-                  });
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
    return Scaffold(     
@@ -82,15 +23,16 @@ class _PanditUserListState extends State<PanditUserList> {
         child: FutureBuilder<QuerySnapshot>(
           future: FirebaseFirestore.instance.collection('users_folder/folder/pandit_users').orderBy("pandit_joining_date",descending: true).limit(limit).get(),          
           builder: (context, snapshot) {
-            if(snapshot.data!=null){                          
-                snapshot.data!.docs.forEach((element) {
-                  _allUsers.add({
-                    'id':'${element.get('pandit_uid')}','name':'${element.get('pandit_name')}','age':element.get('pandit_age'),'state':element.get('pandit_state'),
-                    'number':element.get('pandit_mobile_number')??'','verification':element.get('pandit_verification_status')??'','image':element.get('pandit_display_profile'),
-                  });
-                });
-             
-            }
+            if(snapshot.data!=null){  
+                 List<DropdownMenuItem> list = List<DropdownMenuItem>.generate(
+              snapshot.data!.size,
+              (index) => DropdownMenuItem(
+                  value: Purohit(snapshot.data!.docs[index]).name +
+                      Purohit(snapshot.data!.docs[index]).uid +
+                      Purohit(snapshot.data!.docs[index]).mobile,
+                  child: PurohitTile(
+                    documentSnapshot: snapshot.data!.docs[index],
+                  )));                                       
             return Column(
               children: [
                 const SizedBox(
@@ -99,80 +41,71 @@ class _PanditUserListState extends State<PanditUserList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                     TextButton(onPressed: (){
-                        _allUsers.clear();
-                      if(location ==true){
-                        setState(() {
-                          location = false;
-                        });
-                      }
-                      setState(() {
-                        location = true;
-                      });
-                    }, child: Text( location?"Search by name":"Search by state",style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black54))),
+                      SearchChoices.single(
+                            items: list,
+                            value: "",
+                            onChanged: () {},
+                            underline: SizedBox(),
+                            icon: const Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            displayClearIcon: false,
+                          ),
                      SizedBox(width: 10,),
                     TextButton(
                       
                       onPressed: (){
-                        _foundUsers.clear();
+                       
                       setState(() {
                         limit = limit+10;
                       });
-                    }, child: Text("Icrement by 10",style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black54))),
-                    SizedBox(width: 10,),
-                    SizedBox(
-                      width: 200,
-                      child: TextField(
-                        onChanged: (value) => location?_runFilterLocation(value) :_runFilterName(value),
-                        decoration: const InputDecoration(
-                            labelText: 'Search',),
-                      ),
-                    ),
+                    }, child: Text("Icrement by 10",style: TextStyle(color: Get.isDarkMode?Colors.white:Colors.black54))),                                       
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 Expanded(
-                  child: _foundUsers.isNotEmpty
+                  child: snapshot.data!.docs.isNotEmpty
                       ? GridView.builder(
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(  
                               crossAxisCount: ResponsiveWidget.isSmallScreen(context)?2 :ResponsiveWidget.isMobileLarge(context)? 3: ResponsiveWidget.isMediumScreen(context)? 4:6,  
                               crossAxisSpacing: 4.0,  
                               mainAxisSpacing: 4.0  
                           ),                                         
-                          itemCount: _foundUsers.length,
+                          itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, index) => InkWell(
                             hoverColor: Colors.transparent,
                             onTap: (){                            
-                              Get.toNamed('/home/${AppStrings.MANAGEMENT}/pandit_users/${_foundUsers[index]["id"]}');
+                              Get.toNamed('/home/${AppStrings.MANAGEMENT}/pandit_users/${snapshot.data!.docs[index]["pandit_id"]}');
                             },
                             child: Card(
-                              key: ValueKey(_foundUsers[index]["id"]),                       
+                              key: ValueKey(snapshot.data!.docs[index]["pandit_uid"]),                       
                               elevation: 4,
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               child: ListTile(
                                 contentPadding: EdgeInsets.all(5),
                                 leading: CircleAvatar(
                                   maxRadius: 25,
-                                  backgroundImage: NetworkImage(_foundUsers[index]["image"]),
+                                  backgroundImage: NetworkImage(snapshot.data!.docs[index]["pandit_display_profile"]),
                                 ),
                                 isThreeLine: true,
-                                title: Text(_foundUsers[index]['name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
+                                title: Text(snapshot.data!.docs[index]['pandit_name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        'Age: ${_foundUsers[index]["age"].toString()} years old'),
+                                        'Age: ${snapshot.data!.docs[index]["pandit_age"].toString()} years old'),
                                         SizedBox(height: 5,),
                                          Text(
-                                        'Number: ${_foundUsers[index]["number"].toString()}'),
+                                        'Number: ${snapshot.data!.docs[index]["pandit_mobile_number"].toString()}'),
                                         SizedBox(height: 5,),
                                          Text(
-                                        'Verification: ${_foundUsers[index]["verification"].toString()}'),
+                                        'Verification: ${snapshot.data!.docs[index]["pandit_verification_status"].toString()}'),
                                         SizedBox(height: 5,),
                                          Text(
-                                        'State: ${_foundUsers[index]["state"].toString()}'),
+                                        'State: ${snapshot.data!.docs[index]["pandit_state"].toString()}'),
                           
                                   ],
                                 ),
@@ -189,9 +122,43 @@ class _PanditUserListState extends State<PanditUserList> {
             );
           
           }
+            return const Center(child: Text("Loading..."));
+          }
+          
         ),
       ),
     );
   }
 }
 
+class PurohitTile extends StatelessWidget {
+  final DocumentSnapshot documentSnapshot;
+
+  const PurohitTile({Key? key, required this.documentSnapshot})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        // Navigator.of(context).push(MaterialPageRoute(
+        //     builder: (context) => PurohitProfileLandingPage(
+        //           documentSnapshot: documentSnapshot,
+        //         )));
+      },
+      contentPadding: EdgeInsets.all(10),
+      leading: CircleAvatar(backgroundImage: NetworkImage('${Purohit(documentSnapshot).profileUrl}'),),
+      title: Row(
+        children: [
+          Text("${Purohit(documentSnapshot).name} "),
+          Purohit(documentSnapshot).verification
+              ? Icon(
+                  Icons.verified,
+                  color: Colors.blue,
+                )
+              : SizedBox()
+        ],
+      ),
+      );
+  }
+}
