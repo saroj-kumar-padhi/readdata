@@ -29,10 +29,8 @@ class _PanditUserListState extends State<PanditUserList> {
               (index) => DropdownMenuItem(
                   value: Purohit(snapshot.data!.docs[index]).name +
                       Purohit(snapshot.data!.docs[index]).uid +
-                      Purohit(snapshot.data!.docs[index]).mobile,
-                  child: PurohitTile(
-                    documentSnapshot: snapshot.data!.docs[index],
-                  )));                                       
+                      Purohit(snapshot.data!.docs[index]).mobile + Purohit(snapshot.data!.docs[index]).state,
+                      child:  panditUserCard(snapshot, index, context),));                                       
             return Column(
               children: [
                 const SizedBox(
@@ -80,37 +78,7 @@ class _PanditUserListState extends State<PanditUserList> {
                             onTap: (){                            
                               Get.toNamed('/home/${AppStrings.MANAGEMENT}/pandit_users/${snapshot.data!.docs[index]["pandit_id"]}');
                             },
-                            child: Card(
-                              key: ValueKey(snapshot.data!.docs[index]["pandit_uid"]),                       
-                              elevation: 4,
-                              margin: const EdgeInsets.symmetric(vertical: 10),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.all(5),
-                                leading: CircleAvatar(
-                                  maxRadius: 25,
-                                  backgroundImage: NetworkImage(snapshot.data!.docs[index]["pandit_display_profile"]),
-                                ),
-                                isThreeLine: true,
-                                title: Text(snapshot.data!.docs[index]['pandit_name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        'Age: ${snapshot.data!.docs[index]["pandit_age"].toString()} years old'),
-                                        SizedBox(height: 5,),
-                                         Text(
-                                        'Number: ${snapshot.data!.docs[index]["pandit_mobile_number"].toString()}'),
-                                        SizedBox(height: 5,),
-                                         Text(
-                                        'Verification: ${snapshot.data!.docs[index]["pandit_verification_status"].toString()}'),
-                                        SizedBox(height: 5,),
-                                         Text(
-                                        'State: ${snapshot.data!.docs[index]["pandit_state"].toString()}'),
-                          
-                                  ],
-                                ),
-                              ),
-                            ),
+                            child: panditUserCard(snapshot, index, context),
                           ),
                         )
                       : const Text(
@@ -129,36 +97,42 @@ class _PanditUserListState extends State<PanditUserList> {
       ),
     );
   }
-}
 
-class PurohitTile extends StatelessWidget {
-  final DocumentSnapshot documentSnapshot;
-
-  const PurohitTile({Key? key, required this.documentSnapshot})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //     builder: (context) => PurohitProfileLandingPage(
-        //           documentSnapshot: documentSnapshot,
-        //         )));
-      },
-      contentPadding: EdgeInsets.all(10),
-      leading: CircleAvatar(backgroundImage: NetworkImage('${Purohit(documentSnapshot).profileUrl}'),),
-      title: Row(
-        children: [
-          Text("${Purohit(documentSnapshot).name} "),
-          Purohit(documentSnapshot).verification
-              ? Icon(
-                  Icons.verified,
-                  color: Colors.blue,
-                )
-              : SizedBox()
-        ],
-      ),
-      );
+  Card panditUserCard(AsyncSnapshot<QuerySnapshot<Object?>> snapshot, int index, BuildContext context) {
+    return Card(
+                            key: ValueKey(snapshot.data!.docs[index]["pandit_uid"]),                       
+                            elevation: 4,
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              onTap: (){
+                                 Get.toNamed('/home/${AppStrings.MANAGEMENT}/pandit_users/${snapshot.data!.docs[index]['pandit_uid']}');
+                              },
+                              contentPadding: EdgeInsets.all(5),
+                              leading: CircleAvatar(
+                                maxRadius: 25,
+                                backgroundImage: NetworkImage(snapshot.data!.docs[index]["pandit_display_profile"]),
+                              ),
+                              isThreeLine: true,
+                              title: Text(snapshot.data!.docs[index]['pandit_name'],style: context.theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold,fontSize: 18),),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Age: ${snapshot.data!.docs[index]["pandit_age"].toString()} years old'),
+                                      SizedBox(height: 5,),
+                                       Text(
+                                      'Number: ${snapshot.data!.docs[index]["pandit_mobile_number"].toString()}'),
+                                      SizedBox(height: 5,),
+                                       Text(
+                                      'Verification: ${snapshot.data!.docs[index]["pandit_verification_status"].toString()}'),
+                                      SizedBox(height: 5,),
+                                       Text(
+                                      'State: ${snapshot.data!.docs[index]["pandit_state"].toString()}'),
+                        
+                                ],
+                              ),
+                            ),
+                          );
   }
 }
+
