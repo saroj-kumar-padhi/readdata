@@ -38,6 +38,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
       11,
       (index) => addPujaTextField(_benifits[index], "Puja Benefits $index"),
     );
+    
     List<TextEditingController> _description =
         List.generate(11, (i) => TextEditingController());
     List<Widget> _descriptionTextFields = List.generate(
@@ -155,7 +156,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                     height: 20,
                   ),
                   chipsSelection(0, "Benefit"),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   // Row(
@@ -393,7 +394,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                         children: index == 1
                             ? controller.selectedGodListWidget
                             : controller.selectedBeneditListWidget),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     DropdownButtonHideUnderline(

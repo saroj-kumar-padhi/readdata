@@ -86,9 +86,12 @@ class AddUpdatePuja extends StatelessWidget {
                             ));
                           });
                           if (tab == 'up') {
-                            return Wrap(
-                              direction: Axis.horizontal,
-                              children: _pujaCards,
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Wrap(                              
+                                direction: Axis.horizontal,
+                                children: _pujaCards,
+                              ),
                             );
                           } else if (tab == 'an') {
                             return AddNewPuja();

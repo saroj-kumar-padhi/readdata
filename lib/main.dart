@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:management/app/modules/content_entry/samagri_section/view/samagri_add_delete.dart';
 import 'package:management/app/modules/management/view/pandit_user_details.dart';
 import 'package:management/resources/app_strings.dart';
 import 'app/modules/content_entry/puja_view/views/add_update_puja.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
            ),
             GetPage(name: '/update_puja/:tab', page: ()=>AddUpdatePuja(),                      
            ),
+           GetPage(name: '/samagri', page:()=>SamagriAddDelete())
           ]
           )
       ],

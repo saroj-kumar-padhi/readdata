@@ -43,11 +43,14 @@ class HomeController extends GetxController {
 {"code": "WB","name": "West Bengal"}];
   final List<Map<String, dynamic>> allSamagris = [];
   final Rx<List<Map<String, dynamic>>> foundPlayers =
-      Rx<List<Map<String, dynamic>>>([]);
+  Rx<List<Map<String, dynamic>>>([]);
   RxList<String> selectedGodList = <String>[].obs;
   RxList<Widget> selectedGodListWidget = <Widget>[].obs;
   RxList<String> selectedBenefitList = <String>[].obs;
   RxList<Widget> selectedBeneditListWidget = <Widget>[].obs;
+  RxString? keyword = ''.obs;
+  RxString? price = ''.obs;
+  RxString? duration = ''.obs;
   List<String> gods = [
     'god shiva',
     'god vishnu',
