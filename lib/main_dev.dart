@@ -29,7 +29,7 @@ void main() async{
   var configuredApp = AppConfig(
     appTitle: "Flutter Flavors Dev",
     buildFlavor: "Development",
-    child: MyApp(),
+    child:  MyApp(),
   );
   return runApp(configuredApp);
 }

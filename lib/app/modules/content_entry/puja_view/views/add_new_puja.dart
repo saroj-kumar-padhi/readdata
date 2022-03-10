@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/material.dart';
 import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
 import '../controller/puja_add_controller.dart';
-
 
 class AddNewPuja extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
       11,
       (index) => addPujaTextField(_benifits[index], "Puja Benefits $index"),
     );
-    
+
     List<TextEditingController> _description =
         List.generate(11, (i) => TextEditingController());
     List<Widget> _descriptionTextFields = List.generate(
@@ -48,8 +48,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
     );
     TextEditingController keyword = TextEditingController();
     TextEditingController price = TextEditingController();
-    TextEditingController duration = TextEditingController();   
-
+    TextEditingController duration = TextEditingController();
 
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
@@ -76,8 +75,8 @@ class _AddNewPujaState extends State<AddNewPuja> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                    title:const Text("Alert"),
-                                    content:const Text(
+                                    title: const Text("Alert"),
+                                    content: const Text(
                                         "Are you sure that you want to update this picture?"),
                                     actions: [
                                       TextButton(
@@ -224,89 +223,82 @@ class _AddNewPujaState extends State<AddNewPuja> {
                   //     ),
                   //   ],
                   // ),
-                 
-                 
+
                   InkWell(
                     onTap: () {
                       Get.defaultDialog(
                           contentPadding: EdgeInsets.all(20),
                           title: "Warning",
-                          content: Text("Are you sure you want to remove ?"),                        
+                          content: Text("Are you sure you want to remove ?"),
                           onConfirm: () {
-                           List<Map<String , dynamic>> itemsNeeded = [{}];
-                             Map<String , dynamic>a = {};
-                              controller.foundPlayers.value.asMap().forEach((qkey, qvalue) {
-                                //  if([qvalue][qkey]['quantity']!='quantity'){
-                                //    itemsNeeded.add({
-                                //      'id':[qvalue][qkey]['id'], 'quantity':[qvalue][qkey]['quantity']
-                                //    });
-                                //  }   
-                               
-                                                  
-                              });
-                            // List<String> names = [];
-                            // List<String> description = [];
+                            List<Map<String, dynamic>> itemsNeeded = [];
+                            Map<String, dynamic> a = {};
 
-                            // _name.forEach((element) {
-                            //   names.add(element.text);
-                            // });
-                            // _description.forEach((element) {
-                            //   description.add(element.text);
-                            // });
-                            // Future.delayed(Duration(seconds: 4), () async{
-                            //  await FirebaseFirestore.instance
-                            //       .doc(
-                            //           '/assets_folder/puja_ceremony_folder/folder/$pujaId')
-                            //       .set({
-                            //     'puja_ceremony_name':
-                            //         FieldValue.arrayUnion(names),
-                            //     'puja_ceremony_description':
-                            //         FieldValue.arrayUnion(description),
-                            //     'puja_ceremony_display_picture': image,
-                            //     'puja_ceremony_god_filter':
-                            //         FieldValue.arrayUnion(
-                            //             controller.selectedGodList),
-                            //     'puja_ceremony_benefits_filter':
-                            //         FieldValue.arrayUnion(
-                            //             controller.selectedBenefitList),
-                            //     'puja_ceremony_standard_price': price.text,
-                            //     'puja_ceremony_standard_duration':
-                            //         duration.text,
-                            //     'puja_ceremony_type_filter':
-                            //         controller.pujaType.value,
-                            //     'puja_ceremony_id': pujaId,
-                            //     'puja_ceremony_promise': [],
-                            //     'puja_ceremony_performing_pandits': [],
-                            //     'puja_ceremony_steps': [],
-                            //     'puja_ceremony_key_insights': null,
-                            //     'puja_ceremony_date_of_creation':
-                            //         FieldValue.serverTimestamp()
-                            //   });
-                            // }).whenComplete(() {
-                            //   List<Map<String , dynamic>> itemsNeeded = [{}];
-                            //  Map<String , dynamic>a = {};
-                            //   controller.foundPlayers.value.asMap().forEach((qkey, qvalue) {
-                            //     //  if([qvalue][qkey]['quantity']!='quantity'){
-                            //     //    itemsNeeded.add({
-                            //     //      'id':[qvalue][qkey]['id'], 'quantity':[qvalue][qkey]['quantity']
-                            //     //    });
-                            //     //  }   
-                               
-                                                  
-                            //   });
-                            // //    controller.states.asMap().forEach((key, value) async{                                                                 
-                            // //        Future.delayed(Duration(seconds: 5),()async{
-                            // //         await FirebaseFirestore.instance
-                            // //           .doc('/assets_folder/puja_ceremony_folder/folder/PJID2022310165417/puja_item_folder/${value['name']}')
-                            // //           .set({
-                            // //             'items': FieldValue.arrayUnion(itemsNeeded)                                       
-                            // //           });
-                            // //           Get.back();
-                            // //        });                                                          
-                            // // });
-                            // });
-                           
-                           
+
+                            print(itemsNeeded);
+                            List<String> names = [];
+                            List<String> description = [];
+
+                            _name.forEach((element) {
+                              names.add(element.text);
+                            });
+                            _description.forEach((element) {
+                              description.add(element.text);
+                            });
+                            Future.delayed(Duration(seconds: 4), () async{
+                             await FirebaseFirestore.instance
+                                  .doc(
+                                      '/assets_folder/puja_ceremony_folder/folder/$pujaId')
+                                  .set({
+                                'puja_ceremony_name':
+                                    FieldValue.arrayUnion(names),
+                                'puja_ceremony_description':
+                                    FieldValue.arrayUnion(description),
+                                'puja_ceremony_display_picture': image,
+                                'puja_ceremony_god_filter':
+                                    FieldValue.arrayUnion(
+                                        controller.selectedGodList),
+                                'puja_ceremony_benefits_filter':
+                                    FieldValue.arrayUnion(
+                                        controller.selectedBenefitList),
+                                'puja_ceremony_standard_price': price.text,
+                                'puja_ceremony_standard_duration':
+                                    duration.text,
+                                'puja_ceremony_type_filter':
+                                    controller.pujaType.value,
+                                'puja_ceremony_id': pujaId,
+                                'puja_ceremony_promise': [],
+                                'puja_ceremony_performing_pandits': [],
+                                'puja_ceremony_steps': [],
+                                'puja_ceremony_key_insights': null,
+                                'puja_ceremony_date_of_creation':
+                                    FieldValue.serverTimestamp()
+                              });
+                            }).whenComplete(() {
+                              Map<String , dynamic> itemsNeeded={};
+
+                              int len = controller.foundPlayers.value.length;
+                              for (int i = 0; i < len; i++) {
+                                if (controller.foundPlayers.value[i]
+                                ["quantity"] !=
+                                    "quantity") {
+                                  print("flag ${controller.foundPlayers.value[i]["quantity"]}");
+                                  itemsNeeded!.addAll({
+                                    '${controller.foundPlayers.value[i]["id"]}':
+                                    '${controller.foundPlayers.value[i]["quantity"]}'
+                                  });
+                                }
+                              }
+                              print(itemsNeeded);
+                               controller.states.asMap().forEach((key, value) async{
+                                   Future.delayed(Duration(seconds: 5),()async{
+                                    await FirebaseFirestore.instance
+                                      .doc('/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
+                                      .set(itemsNeeded!);
+                                      Get.back();
+                                   });
+                            });
+                            });
                           },
                           onCancel: () {
                             Get.back();
@@ -361,7 +353,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                               ),
                             ),
                             title: Text(
-                              "${controller.foundPlayers.value[index]['name']}",                              
+                              "${controller.foundPlayers.value[index]['name']}",
                             ),
                           );
                         }),
@@ -382,7 +374,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
   }
 
   Widget chipsSelection(int index, String text) {
-    return Obx(() => Container(    
+    return Obx(() => Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -445,30 +437,30 @@ class _AddNewPujaState extends State<AddNewPuja> {
                         onChanged: (value) {
                           if (index == 1) {
                             if (controller.selectedGodList.contains(value)) {
-                                Get.snackbar("Duplicay", "We restricted duplicay",
-                                    backgroundColor:
-                                        context.theme.backgroundColor);
-                              } else {
-                                
-              
-                                controller.selectedGodList.add(value as String);
-                                controller.selectedGodListWidget.add(Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Chip(label: Text(value.toString())),
-                                ));
-                              }
+                              Get.snackbar("Duplicay", "We restricted duplicay",
+                                  backgroundColor:
+                                      context.theme.backgroundColor);
+                            } else {
+                              controller.selectedGodList.add(value as String);
+                              controller.selectedGodListWidget.add(Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Chip(label: Text(value.toString())),
+                              ));
+                            }
                           } else {
-                             if (controller.selectedBenefitList.contains(value)) {
-                                Get.snackbar("Duplicay", "We restricted duplicay",
-                                    backgroundColor:
-                                        context.theme.backgroundColor);
-                              } else {
-                                controller.selectedBenefitList.add(value as String);
-                                controller.selectedBeneditListWidget.add(Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Chip(label: Text(value.toString())),
-                                ));
-                              }
+                            if (controller.selectedBenefitList
+                                .contains(value)) {
+                              Get.snackbar("Duplicay", "We restricted duplicay",
+                                  backgroundColor:
+                                      context.theme.backgroundColor);
+                            } else {
+                              controller.selectedBenefitList
+                                  .add(value as String);
+                              controller.selectedBeneditListWidget.add(Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Chip(label: Text(value.toString())),
+                              ));
+                            }
                           }
                         },
                         icon: const Icon(
@@ -502,12 +494,12 @@ class _AddNewPujaState extends State<AddNewPuja> {
               TextButton(
                   onPressed: () {
                     if (index == 1) {
-                        controller.selectedGodList.clear();
-                        controller.selectedGodListWidget.clear();
-                      } else {
-                        controller.selectedBeneditListWidget.clear();
-                        controller.selectedBenefitList.clear();
-                      }
+                      controller.selectedGodList.clear();
+                      controller.selectedGodListWidget.clear();
+                    } else {
+                      controller.selectedBeneditListWidget.clear();
+                      controller.selectedBenefitList.clear();
+                    }
                   },
                   child: Text(
                     "Clear Selection",
@@ -572,6 +564,7 @@ class SamagriModel {
   List<dynamic>? name = [];
   String? quanatity = '';
   bool? isChecked = false;
+
   SamagriModel({this.name, this.quanatity, this.isChecked});
 }
 
@@ -592,4 +585,3 @@ class CheckBoxListTileModel {
     ];
   }
 }
-
