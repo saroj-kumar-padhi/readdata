@@ -36,8 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   twilio_flutter: ^0.0.9
   system_theme: ^1.0.1
-  #get: ^4.6.1
-  get: ^5.0.0-beta.48
+  get: ^4.6.1
+  #get: ^5.0.0-beta.50
   firebase_auth: ^3.3.9
   cloud_firestore: ^3.1.10
   firebase_core: ^1.13.1

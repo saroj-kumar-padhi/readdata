@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management/app/modules/content_entry/view/content_entry_view.dart';
+import 'package:management/app/modules/content_entry/content_entry_view.dart';
 import 'package:management/resources/app_exports.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:management/resources/app_strings.dart';

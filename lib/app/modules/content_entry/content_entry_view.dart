@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:management/resources/app_strings.dart';
-import '../../../../resources/app_components/function_cards.dart';
+import '../../../resources/app_components/function_cards.dart';
 import 'package:get/get.dart';
 class ContentEntryView extends StatelessWidget{
   final String id;

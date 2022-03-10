@@ -1,0 +1,40 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+
+		{
+			"name": "run_web_dev",
+			"request": "launch",
+			"type": "dart",
+			"program": "lib/main_dev.dart",
+			"args": [
+				"--flavor",
+				"dev",
+                "-d",
+                "chrome",
+                "--web-renderer",
+                "html"
+			]
+		},
+		{
+			"name": "run_staging",
+			"request": "launch",
+			"type": "dart",
+			"program": "lib/main_staging.dart",
+			"args": [
+				"--flavor",
+				"staging"
+			]
+		},
+		{
+			"name": "run_prod",
+			"request": "launch",
+			"type": "dart",
+			"program": "lib/main_prod.dart",
+			"args": [
+				"--flavor",
+				"prod"
+			]
+		},
+	]
+}
