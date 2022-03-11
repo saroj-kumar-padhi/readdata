@@ -9,19 +9,22 @@ import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
 import '../controller/puja_add_controller.dart';
 
-class AddNewPuja extends StatefulWidget {
-  final AsyncSnapshot<DocumentSnapshot>? fields ;
-  final bool? edit ;
-  const AddNewPuja({Key? key, this.fields, this.edit}) : super(key: key);
+class UpdatePuja extends StatefulWidget {
+  final String pujaId;
+  final TextEditingController keyword ;
+  final TextEditingController price;
+  final TextEditingController duration;
+  final List<dynamic> updateName;
+  final List<dynamic> updateDescription;
+  final List<dynamic> updateBenefit;
+  const UpdatePuja({Key? key,required this.pujaId, required this.updateName,required this.updateDescription, required this.updateBenefit,
+  required this.keyword, required this.price , required this.duration}) : super(key: key);
   @override
-  State<AddNewPuja> createState() => _AddNewPujaState();
+  State<UpdatePuja> createState() => _UpdatePujaState();
 }
 
-String pujaId = "PJID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
 
-class _AddNewPujaState extends State<AddNewPuja> {
-  List<CheckBoxListTileModel> checkBoxListTileModel =
-      CheckBoxListTileModel.getUsers();
+class _UpdatePujaState extends State<UpdatePuja> {
   String image =
       'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png';
   HomeController controller = Get.put(HomeController());
@@ -29,32 +32,32 @@ class _AddNewPujaState extends State<AddNewPuja> {
   @override
   Widget build(BuildContext context) {
     List<TextEditingController> _name =
-        List.generate(11, (i) => TextEditingController());
+        List.generate(5, (i) => TextEditingController(text:widget.updateName[i]));
     List<Widget> _nameTextFields = List.generate(
-      11,
+      5,
       (index) => addPujaTextField(_name[index], "Puja Name $index"),
     );
     List<TextEditingController> _benifits =
-        List.generate(11, (i) => TextEditingController());
+        List.generate(5, (i) => TextEditingController(text: widget.updateBenefit[i]));
     List<Widget> _benefits = List.generate(
-      11,
+      5,
       (index) => addPujaTextField(_benifits[index], "Puja Benefits $index"),
     );
 
     List<TextEditingController> _description =
-        List.generate(11, (i) => TextEditingController());
+        List.generate(5, (i) => TextEditingController(text:widget.updateDescription[i]));
     List<Widget> _descriptionTextFields = List.generate(
-      11,
+      5,
       (index) =>
           addPujaTextField(_description[index], "Puja Description $index"),
     );
-    TextEditingController keyword = TextEditingController();
-    TextEditingController price = TextEditingController();
-    TextEditingController duration = TextEditingController();
+    TextEditingController keyword = widget.keyword;
+    TextEditingController price = widget.price;
+    TextEditingController duration = widget.duration;
 
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
-          ? EdgeInsets.all(0)
+          ? const EdgeInsets.all(0)
           : EdgeInsets.only(left: Get.width * 0.15, right: Get.width * 0.07),
       child: Row(
         children: [
@@ -85,7 +88,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text("Cancel")),
+                                          child: const Text("Cancel")),
                                       TextButton(
                                           onPressed: () {
                                             FileUploadInputElement input =
@@ -103,7 +106,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                                 var snapshot = await fs
                                                     .ref(
                                                         'assets_folder/puja_ceremony_folder')
-                                                    .child('$pujaId')
+                                                    .child('${widget.pujaId}')
                                                     .putBlob(file);
                                                 String downloadUrl =
                                                     await snapshot.ref
@@ -116,47 +119,47 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                             });
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text("Continue")),
+                                          child: const Text("Continue")),
                                     ],
                                   ));
                         },
-                        child: Text("Edit")),
+                        child: const Text("Edit")),
                   ),
                   ExpandablePanel(
-                      header: redButton("Add Name"),
+                      header: redButton("Update Name"),
                       collapsed: const SizedBox(),
                       expanded: Column(children: _nameTextFields)),
                   ExpandablePanel(
-                      header: redButton("Add Description"),
+                      header: redButton("Update Description"),
                       collapsed: const SizedBox(),
                       expanded: Column(children: _descriptionTextFields)),
                   ExpandablePanel(
-                      header: redButton("Add Benefits"),
+                      header: redButton("Update Benefits"),
                       collapsed: const SizedBox(),
                       expanded: Column(children: _benefits)),
                   ExpandablePanel(
-                    header: addPujaTextField(keyword, "Puja Keyword"),
+                    header: addPujaTextField(keyword, "Update Puja Keyword"),
                     collapsed: const SizedBox(),
                     expanded: const SizedBox(),
                   ),
                   ExpandablePanel(
-                    header: addPujaTextField(duration, "Puja Duration"),
+                    header: addPujaTextField(duration, "Update Puja Duration"),
                     collapsed: const SizedBox(),
                     expanded: SizedBox(),
                   ),
                   ExpandablePanel(
-                    header: addPujaTextField(price, "Puja price"),
+                    header: addPujaTextField(price, "Update Puja price"),
                     collapsed: const SizedBox(),
                     expanded: SizedBox(),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(1, "Select God tags"),
+                  chipsSelection(1, "Update Select God tags"),
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(0, "Benefit"),
+                  chipsSelection(0, "Update Benefit"),
                   const SizedBox(
                     height: 20,
                   ),                 
@@ -182,9 +185,9 @@ class _AddNewPujaState extends State<AddNewPuja> {
                             Future.delayed(Duration(seconds: 4), () async{
                              await FirebaseFirestore.instance
                                   .doc(
-                                      '/assets_folder/puja_ceremony_folder/folder/$pujaId')
-                                  .set({
-                                 'puja_ceremony_keyword': keyword.text,   
+                                      '/assets_folder/puja_ceremony_folder/folder/${widget.pujaId}')
+                                  .update({
+                                 'puja_ceremony_keyword': keyword.text,     
                                 'puja_ceremony_name':
                                     FieldValue.arrayUnion(names),
                                 'puja_ceremony_description':
@@ -200,7 +203,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                     duration.text,
                                 'puja_ceremony_type_filter':
                                     controller.pujaType.value,
-                                'puja_ceremony_id': pujaId,
+                                'puja_ceremony_id': widget.pujaId,
                                 'puja_ceremony_promise': FieldValue.arrayUnion(
                                         controller.selectedBenefitList),
                                 'puja_ceremony_performing_pandits': [],
@@ -223,9 +226,9 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                 }
                               }                             
                                controller.states.asMap().forEach((key, value) async{
-                                   Future.delayed(const Duration(seconds: 1),()async{
+                                   Future.delayed(Duration(seconds: 1),()async{
                                     await FirebaseFirestore.instance
-                                      .doc('/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
+                                      .doc('/assets_folder/puja_ceremony_folder/folder/${widget.pujaId}/puja_item_folder/${value['name']}')
                                       .set({
                                         'items' :FieldValue.arrayUnion(itemsNeeded)
                                       });
@@ -236,7 +239,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                             'total_puja_ceremony' : FieldValue.increment(1)
                                       });
                             });
-                            });
+                            });                        
                           },
                           onCancel: () {
                             Get.back();
@@ -304,13 +307,6 @@ class _AddNewPujaState extends State<AddNewPuja> {
       ),
     );
   }
-
-  void itemChange(bool val, int index) {
-    setState(() {
-      checkBoxListTileModel[index].isCheck = val;
-    });
-  }
-
   Widget chipsSelection(int index, String text) {
     return Obx(() => Container(
           child: Row(
@@ -463,6 +459,9 @@ class _AddNewPujaState extends State<AddNewPuja> {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: 10,
+        minLines: 1,
           controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -477,7 +476,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
             hintText: hintText,
 
             //make hint text
-            hintStyle: TextStyle(
+            hintStyle: const  TextStyle(
               color: Colors.grey,
               fontSize: 16,
               fontFamily: "verdana_regular",
@@ -487,7 +486,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
             //create lable
             labelText: hintText,
             //lable style
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.grey,
               fontSize: 16,
               fontFamily: "verdana_regular",
@@ -498,28 +497,3 @@ class _AddNewPujaState extends State<AddNewPuja> {
   }
 }
 
-class SamagriModel {
-  List<dynamic>? name = [];
-  String? quanatity = '';
-  bool? isChecked = false;
-
-  SamagriModel({this.name, this.quanatity, this.isChecked});
-}
-
-class CheckBoxListTileModel {
-  int? userId;
-  String? title;
-  bool? isCheck;
-
-  CheckBoxListTileModel({this.userId, this.title, this.isCheck});
-
-  static List<CheckBoxListTileModel> getUsers() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(userId: 1, title: "Android", isCheck: true),
-      CheckBoxListTileModel(userId: 2, title: "Flutter", isCheck: false),
-      CheckBoxListTileModel(userId: 3, title: "IOS", isCheck: false),
-      CheckBoxListTileModel(userId: 4, title: "PHP", isCheck: false),
-      CheckBoxListTileModel(userId: 5, title: "Node", isCheck: false),
-    ];
-  }
-}

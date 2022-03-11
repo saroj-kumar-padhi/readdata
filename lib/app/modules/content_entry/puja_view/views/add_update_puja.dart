@@ -2,6 +2,9 @@ import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:management/app/modules/content_entry/puja_view/controller/puja_add_controller.dart';
+import 'package:management/app/modules/content_entry/puja_view/views/update_puja.dart';
+import 'package:management/app/modules/content_entry/samagri_section/view/samagri_add_delete.dart';
 import 'package:management/resources/app_components/function_cards.dart';
 import 'package:management/resources/app_components/menu_bar_tiles.dart';
 import 'package:management/resources/app_exports.dart';
@@ -73,11 +76,28 @@ class AddUpdatePuja extends StatelessWidget {
                           }
                           List<Widget> _pujaCards = [];
                           snapshot.data!.docs.forEach((element) {
-                            _pujaCards.add(PujaCards(
-                              text: element['puja_ceremony_name'][0],
-                              iconData:
-                                  element['puja_ceremony_display_picture'],
-                              ontap: () {},
+                            _pujaCards.add(PujaCards(                             
+                            text: element['puja_ceremony_name'][0],
+                            iconData:
+                                element['puja_ceremony_display_picture'],
+                            ontap: () {
+                              HomeController homeController = Get.put(HomeController());
+                              homeController.samagriFetch();
+                              homeController.fetchUpdateSamagri(element['puja_ceremony_id']);                                                          
+                               Get.bottomSheet(                                
+                                 Container(                                 
+                                  height: Get.height,
+                                  child:  UpdatePuja(
+                                    keyword: TextEditingController(text: element['puja_ceremony_keyword']),
+                                    price:  TextEditingController(text: element['puja_ceremony_standard_price']),
+                                    duration:  TextEditingController(text: element['puja_ceremony_standard_duration']),
+                                    pujaId: element['puja_ceremony_id'],
+                                    updateBenefit: element['puja_ceremony_benefits_filter'],
+                                    updateName: element['puja_ceremony_name'],
+                                    updateDescription: element['puja_ceremony_description'],
+                                  )
+                                ),backgroundColor: context.theme.backgroundColor);
+                            },
                             ));
                           });
                           if (tab == 'up') {
