@@ -8,6 +8,12 @@ This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
+To build Web :
+flutter build web -t lib/main_prod.dart --web-renderer html
+
+To run web :
+flutter run -d chrome -t lib/main_prod.dart --web-renderer html
+
 - [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
