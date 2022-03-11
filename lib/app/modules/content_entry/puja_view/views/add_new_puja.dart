@@ -9,7 +9,6 @@ import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
 import '../controller/puja_add_controller.dart';
 
-
 class AddNewPuja extends StatefulWidget {
   @override
   State<AddNewPuja> createState() => _AddNewPujaState();
@@ -39,7 +38,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
       11,
       (index) => addPujaTextField(_benifits[index], "Puja Benefits $index"),
     );
-    
+
     List<TextEditingController> _description =
         List.generate(11, (i) => TextEditingController());
     List<Widget> _descriptionTextFields = List.generate(
@@ -49,8 +48,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
     );
     TextEditingController keyword = TextEditingController();
     TextEditingController price = TextEditingController();
-    TextEditingController duration = TextEditingController();   
-
+    TextEditingController duration = TextEditingController();
 
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
@@ -77,8 +75,8 @@ class _AddNewPujaState extends State<AddNewPuja> {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                    title:const Text("Alert"),
-                                    content:const Text(
+                                    title: const Text("Alert"),
+                                    content: const Text(
                                         "Are you sure that you want to update this picture?"),
                                     actions: [
                                       TextButton(
@@ -225,16 +223,19 @@ class _AddNewPujaState extends State<AddNewPuja> {
                   //     ),
                   //   ],
                   // ),
-                 
-                 
+
                   InkWell(
                     onTap: () {
                       Get.defaultDialog(
                           contentPadding: EdgeInsets.all(20),
                           title: "Warning",
-                          content: Text("Are you sure you want to remove ?"),                        
+                          content: Text("Are you sure you want to remove ?"),
                           onConfirm: () {
-                        
+                            List<Map<String, dynamic>> itemsNeeded = [];
+                            Map<String, dynamic> a = {};
+
+
+                            print(itemsNeeded);
                             List<String> names = [];
                             List<String> description = [];
 
@@ -274,26 +275,30 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                     FieldValue.serverTimestamp()
                               });
                             }).whenComplete(() {
-                              Map<String , dynamic> itemsNeeded = {};
-                            
-                              for(var i=0; i<controller.foundPlayers.value.length;i++){
-                                if(controller.foundPlayers.value[i]['quantity']!='quantity'){
-                                  itemsNeeded.addAll(controller.foundPlayers.value[i]);
+                              Map<String , dynamic> itemsNeeded={};
+
+                              int len = controller.foundPlayers.value.length;
+                              for (int i = 0; i < len; i++) {
+                                if (controller.foundPlayers.value[i]
+                                ["quantity"] !=
+                                    "quantity") {
+                                  print("flag ${controller.foundPlayers.value[i]["quantity"]}");
+                                  itemsNeeded!.addAll({
+                                    '${controller.foundPlayers.value[i]["id"]}':
+                                    '${controller.foundPlayers.value[i]["quantity"]}'
+                                  });
                                 }
                               }
-                               controller.states.asMap().forEach((key, value) async{                                                                 
-                                   Future.delayed(Duration(seconds: 1),()async{
+                              print(itemsNeeded);
+                               controller.states.asMap().forEach((key, value) async{
+                                   Future.delayed(Duration(seconds: 5),()async{
                                     await FirebaseFirestore.instance
                                       .doc('/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
-                                      .set({
-                                        '${itemsNeeded['id']}': '${itemsNeeded['quantity']}'                                      
-                                      });
+                                      .set(itemsNeeded!);
                                       Get.back();
-                                   });                                                          
+                                   });
                             });
                             });
-                           
-                           
                           },
                           onCancel: () {
                             Get.back();
@@ -348,7 +353,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                               ),
                             ),
                             title: Text(
-                              "${controller.foundPlayers.value[index]['name']}",                              
+                              "${controller.foundPlayers.value[index]['name']}",
                             ),
                           );
                         }),
@@ -369,7 +374,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
   }
 
   Widget chipsSelection(int index, String text) {
-    return Obx(() => Container(    
+    return Obx(() => Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -432,30 +437,30 @@ class _AddNewPujaState extends State<AddNewPuja> {
                         onChanged: (value) {
                           if (index == 1) {
                             if (controller.selectedGodList.contains(value)) {
-                                Get.snackbar("Duplicay", "We restricted duplicay",
-                                    backgroundColor:
-                                        context.theme.backgroundColor);
-                              } else {
-                                
-              
-                                controller.selectedGodList.add(value as String);
-                                controller.selectedGodListWidget.add(Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Chip(label: Text(value.toString())),
-                                ));
-                              }
+                              Get.snackbar("Duplicay", "We restricted duplicay",
+                                  backgroundColor:
+                                      context.theme.backgroundColor);
+                            } else {
+                              controller.selectedGodList.add(value as String);
+                              controller.selectedGodListWidget.add(Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Chip(label: Text(value.toString())),
+                              ));
+                            }
                           } else {
-                             if (controller.selectedBenefitList.contains(value)) {
-                                Get.snackbar("Duplicay", "We restricted duplicay",
-                                    backgroundColor:
-                                        context.theme.backgroundColor);
-                              } else {
-                                controller.selectedBenefitList.add(value as String);
-                                controller.selectedBeneditListWidget.add(Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Chip(label: Text(value.toString())),
-                                ));
-                              }
+                            if (controller.selectedBenefitList
+                                .contains(value)) {
+                              Get.snackbar("Duplicay", "We restricted duplicay",
+                                  backgroundColor:
+                                      context.theme.backgroundColor);
+                            } else {
+                              controller.selectedBenefitList
+                                  .add(value as String);
+                              controller.selectedBeneditListWidget.add(Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Chip(label: Text(value.toString())),
+                              ));
+                            }
                           }
                         },
                         icon: const Icon(
@@ -489,12 +494,12 @@ class _AddNewPujaState extends State<AddNewPuja> {
               TextButton(
                   onPressed: () {
                     if (index == 1) {
-                        controller.selectedGodList.clear();
-                        controller.selectedGodListWidget.clear();
-                      } else {
-                        controller.selectedBeneditListWidget.clear();
-                        controller.selectedBenefitList.clear();
-                      }
+                      controller.selectedGodList.clear();
+                      controller.selectedGodListWidget.clear();
+                    } else {
+                      controller.selectedBeneditListWidget.clear();
+                      controller.selectedBenefitList.clear();
+                    }
                   },
                   child: Text(
                     "Clear Selection",
@@ -559,6 +564,7 @@ class SamagriModel {
   List<dynamic>? name = [];
   String? quanatity = '';
   bool? isChecked = false;
+
   SamagriModel({this.name, this.quanatity, this.isChecked});
 }
 
@@ -579,4 +585,3 @@ class CheckBoxListTileModel {
     ];
   }
 }
-
