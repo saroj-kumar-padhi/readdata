@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -233,78 +234,64 @@ class _AddNewPujaState extends State<AddNewPuja> {
                           title: "Warning",
                           content: Text("Are you sure you want to remove ?"),                        
                           onConfirm: () {
-                           List<Map<String , dynamic>> itemsNeeded = [{}];
-                             Map<String , dynamic>a = {};
-                              controller.foundPlayers.value.asMap().forEach((qkey, qvalue) {
-                                //  if([qvalue][qkey]['quantity']!='quantity'){
-                                //    itemsNeeded.add({
-                                //      'id':[qvalue][qkey]['id'], 'quantity':[qvalue][qkey]['quantity']
-                                //    });
-                                //  }   
-                               
-                                                  
-                              });
-                            // List<String> names = [];
-                            // List<String> description = [];
+                        
+                            List<String> names = [];
+                            List<String> description = [];
 
-                            // _name.forEach((element) {
-                            //   names.add(element.text);
-                            // });
-                            // _description.forEach((element) {
-                            //   description.add(element.text);
-                            // });
-                            // Future.delayed(Duration(seconds: 4), () async{
-                            //  await FirebaseFirestore.instance
-                            //       .doc(
-                            //           '/assets_folder/puja_ceremony_folder/folder/$pujaId')
-                            //       .set({
-                            //     'puja_ceremony_name':
-                            //         FieldValue.arrayUnion(names),
-                            //     'puja_ceremony_description':
-                            //         FieldValue.arrayUnion(description),
-                            //     'puja_ceremony_display_picture': image,
-                            //     'puja_ceremony_god_filter':
-                            //         FieldValue.arrayUnion(
-                            //             controller.selectedGodList),
-                            //     'puja_ceremony_benefits_filter':
-                            //         FieldValue.arrayUnion(
-                            //             controller.selectedBenefitList),
-                            //     'puja_ceremony_standard_price': price.text,
-                            //     'puja_ceremony_standard_duration':
-                            //         duration.text,
-                            //     'puja_ceremony_type_filter':
-                            //         controller.pujaType.value,
-                            //     'puja_ceremony_id': pujaId,
-                            //     'puja_ceremony_promise': [],
-                            //     'puja_ceremony_performing_pandits': [],
-                            //     'puja_ceremony_steps': [],
-                            //     'puja_ceremony_key_insights': null,
-                            //     'puja_ceremony_date_of_creation':
-                            //         FieldValue.serverTimestamp()
-                            //   });
-                            // }).whenComplete(() {
-                            //   List<Map<String , dynamic>> itemsNeeded = [{}];
-                            //  Map<String , dynamic>a = {};
-                            //   controller.foundPlayers.value.asMap().forEach((qkey, qvalue) {
-                            //     //  if([qvalue][qkey]['quantity']!='quantity'){
-                            //     //    itemsNeeded.add({
-                            //     //      'id':[qvalue][qkey]['id'], 'quantity':[qvalue][qkey]['quantity']
-                            //     //    });
-                            //     //  }   
-                               
-                                                  
-                            //   });
-                            // //    controller.states.asMap().forEach((key, value) async{                                                                 
-                            // //        Future.delayed(Duration(seconds: 5),()async{
-                            // //         await FirebaseFirestore.instance
-                            // //           .doc('/assets_folder/puja_ceremony_folder/folder/PJID2022310165417/puja_item_folder/${value['name']}')
-                            // //           .set({
-                            // //             'items': FieldValue.arrayUnion(itemsNeeded)                                       
-                            // //           });
-                            // //           Get.back();
-                            // //        });                                                          
-                            // // });
-                            // });
+                            _name.forEach((element) {
+                              names.add(element.text);
+                            });
+                            _description.forEach((element) {
+                              description.add(element.text);
+                            });
+                            Future.delayed(Duration(seconds: 4), () async{
+                             await FirebaseFirestore.instance
+                                  .doc(
+                                      '/assets_folder/puja_ceremony_folder/folder/$pujaId')
+                                  .set({
+                                'puja_ceremony_name':
+                                    FieldValue.arrayUnion(names),
+                                'puja_ceremony_description':
+                                    FieldValue.arrayUnion(description),
+                                'puja_ceremony_display_picture': image,
+                                'puja_ceremony_god_filter':
+                                    FieldValue.arrayUnion(
+                                        controller.selectedGodList),
+                                'puja_ceremony_benefits_filter':
+                                    FieldValue.arrayUnion(
+                                        controller.selectedBenefitList),
+                                'puja_ceremony_standard_price': price.text,
+                                'puja_ceremony_standard_duration':
+                                    duration.text,
+                                'puja_ceremony_type_filter':
+                                    controller.pujaType.value,
+                                'puja_ceremony_id': pujaId,
+                                'puja_ceremony_promise': [],
+                                'puja_ceremony_performing_pandits': [],
+                                'puja_ceremony_steps': [],
+                                'puja_ceremony_key_insights': null,
+                                'puja_ceremony_date_of_creation':
+                                    FieldValue.serverTimestamp()
+                              });
+                            }).whenComplete(() {
+                              Map<String , dynamic> itemsNeeded = {};
+                            
+                              for(var i=0; i<controller.foundPlayers.value.length;i++){
+                                if(controller.foundPlayers.value[i]['quantity']!='quantity'){
+                                  itemsNeeded.addAll(controller.foundPlayers.value[i]);
+                                }
+                              }
+                               controller.states.asMap().forEach((key, value) async{                                                                 
+                                   Future.delayed(Duration(seconds: 1),()async{
+                                    await FirebaseFirestore.instance
+                                      .doc('/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
+                                      .set({
+                                        '${itemsNeeded['id']}': '${itemsNeeded['quantity']}'                                      
+                                      });
+                                      Get.back();
+                                   });                                                          
+                            });
+                            });
                            
                            
                           },

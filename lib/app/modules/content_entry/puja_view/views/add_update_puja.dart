@@ -1,15 +1,10 @@
 import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:expandable/expandable.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:management/resources/app_components/function_cards.dart';
 import 'package:management/resources/app_components/menu_bar_tiles.dart';
 import 'package:management/resources/app_exports.dart';
-import 'package:management/resources/responshive.dart';
 import '../../../../../resources/app_strings.dart';
 import 'add_new_puja.dart';
 
