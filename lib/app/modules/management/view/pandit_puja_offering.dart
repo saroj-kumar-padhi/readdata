@@ -35,14 +35,30 @@ class _PujaOfferingState extends State<PujaOffering> {
                   controller.panditServiceData.update((val) {
                     val!.add = false;
                   });                
-                  
-                 FirebaseFirestore.instance.collection('users_folder/folder/pandit_users/03xFw11ALsUQzuC6fTWUjVddhQw2/pandit_ceremony_services/PJID202182217469').add({}); 
+                 List<Map<String , dynamic>>  pujas= [];
+                controller.allPujas.value.forEach((element) {
+                   if(element['selected']==true){
+                     pujas.add({
+                       'puja_ceremony_id':element['id'],
+                       'puja_ceremony_keyword':element['keyword'],
+                       'puja_ceremony_details':'',
+                       'puja_ceremony_time':element['duration'],
+                       'puja_ceremony_price':element['price'],
+                       'puja_ceremony_subscriber':0,
+                       'puja_ceremony_swastik_gain':0
+                     });
+                   }
+                 });                
+                 for (var element in pujas) {
+                   FirebaseFirestore.instance.doc('users_folder/folder/pandit_users/${widget.asyncSnapshot.data!['pandit_uid']}/pandit_ceremony_services/${element['puja_ceremony_id']}').set(element);
+                 }
+                      
                 }
                 else{
                    controller.panditServiceData.update((val) {
-                    val!.add = true;
-                    controller.samagriFetch();
+                    val!.add = true;                    
                   });
+                  
                 }
               }, child: Text(controller.panditServiceData.value.add? "Save":"Add New"))
             ],
@@ -72,7 +88,7 @@ class _PujaOfferingState extends State<PujaOffering> {
             List<Widget> pooja = [];
             for (var mess in data) {
               final String? name = mess['puja_ceremony_keyword'];
-              final double? price = mess['puja_ceremony_price'];
+              final dynamic price = mess['puja_ceremony_price'];
               final String? duration = mess['puja_ceremony_time'];
               final String? id = mess['puja_ceremony_id'];
               final subscriber = mess['puja_ceremony_subscriber'];
@@ -94,7 +110,7 @@ class _PujaOfferingState extends State<PujaOffering> {
           });
   }
 
- addServices(PanditServiesController controller) {
+ Widget addServices(PanditServiesController controller) {
     return ListView.builder(
                         shrinkWrap: true,
                         itemCount: controller.allPujas.value.length,
@@ -189,7 +205,8 @@ class _PujaOfferingState extends State<PujaOffering> {
                  border: InputBorder.none,               
                ),
                ),
-           ),       
+           ), 
+                 
           const SizedBox(height:20),
           TextButton(onPressed: ()async{          
             if(enableId==docId){
@@ -209,7 +226,13 @@ class _PujaOfferingState extends State<PujaOffering> {
                 enableId = docId;
               });
              }
-          }, child: Text(docId==enableId?"Save":"Edit", style: TextStyle(fontSize: 12,color: Get.isDarkMode?Colors.white:Colors.black87)))
+          }, child: Text(docId==enableId?"Save":"Edit", style: TextStyle(fontSize: 12,color: Get.isDarkMode?Colors.white:Colors.black87))),
+          SizedBox(width: 10,),
+          SizedBox(
+             child: TextButton(onPressed: (){
+               FirebaseFirestore.instance.doc('/users_folder/folder/pandit_users/${widget.asyncSnapshot.data!['pandit_uid']}/pandit_ceremony_services/$docId').delete();
+             }, child: Text("Delete",style:TextStyle(color: Colors.redAccent))),
+           ),
         ],
       );
   }

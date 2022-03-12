@@ -11,6 +11,7 @@ class PanditSettingController extends GetxController{
    @override
   void onInit() {
     super.onInit();
+
     updatePanditData(query.data!['pandit_verification_status'], query.data!['pandit_name'], 
     query.data!['pandit_bio'], query.data!['pandit_qualification'], query.data!['pandit_mobile_number'], query.data!['pandit_experience'],
     query.data!['pandit_state'], query.data!['pandit_city'],query.data!['pandit_email']) ;
@@ -42,6 +43,14 @@ class PanditSettingController extends GetxController{
 class PanditServiesController extends GetxController{
   final Rx<List<Map<String, dynamic>>> allPujas =  Rx<List<Map<String, dynamic>>>([]);
   var panditServiceData  = PanditServiceData(add: false).obs;
+
+
+   @override
+  void onInit() {
+    super.onInit();
+    
+  samagriFetch();
+  }
   Future<void> samagriFetch() async {
     await FirebaseFirestore.instance
         .collection("assets_folder/puja_ceremony_folder/folder")
@@ -54,6 +63,7 @@ class PanditServiesController extends GetxController{
           "selected": false,
           "duration": "duration",
           "price":"price",
+          "keyword":element['puja_ceremony_keyword']
         });
       });
     });
