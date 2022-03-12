@@ -53,3 +53,20 @@ class Purohit {
 
   dynamic get uid => snapshot.id;
 }
+
+
+class PanditSettingData{
+  bool edit;
+  bool verification;
+  String? name ='';
+  String? age ='';
+  String? state= '';
+  String? city= '';
+  String? qualification = '';
+  String? number = '';
+  String? bio = '';
+  String? exp='';
+  String? mobile='';
+  String? email='';
+  PanditSettingData({ required this.verification,required this.edit, this.email, this.mobile, this.name,this.exp, this.age,this.bio,this.city,this.number,this.qualification,this.state});
+}

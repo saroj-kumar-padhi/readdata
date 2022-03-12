@@ -175,24 +175,7 @@ class PanditUserDetails extends StatelessWidget{
                           SelectableText(
                             'Uid : ${snapshot.data!['pandit_uid']}',
                             style: TextStyle(fontSize: 10, color: Colors.grey),
-                          ),
-                          /* StreamBuilder<DocumentSnapshot>(
-                            stream: FirebaseFirestore.instance.doc("punditUsers/${uid}/user_profile/user_bank_details").snapshots(),
-                            builder: (context, snapshot) {
-                              if(snapshot.data==null){
-                                return Container(height: 10,width: 10,);
-                              }
-                              final servicess = snapshot.data;
-                              return Column(
-                                children: [
-                                  Text("Bank Name :${servicess.data()['bankName']}"??"not provided"),
-                                  Text("Ifsc code :${servicess.data()['IFSC']}"??"not provided"),
-                                  Text("Account Number: ${servicess.data()['accountNumber']}"??"not provided"),
-                                  Text("Name on bank : ${servicess.data()['name']}"??"not provided")
-                                ],
-                              );
-                            }
-                          )*/
+                          ),                        
                         ],
                       ),
                     ),

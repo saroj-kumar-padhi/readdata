@@ -43,7 +43,7 @@ class _PujaOfferingState extends State<PujaOffering> {
                                           price,
                                           duration,                                          
                                           subscriber,id,
-                                          docId,
+                                          docId,                                          
                                           );
                                       pooja.add(messagewidget);
                                     }
@@ -69,6 +69,7 @@ class _PujaOfferingState extends State<PujaOffering> {
                    fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
              ),
            ),
+           Text(name),
            SizedBox(
              width: 100,
              child: TextFormField(
