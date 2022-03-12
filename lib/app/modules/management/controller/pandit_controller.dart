@@ -39,3 +39,29 @@ class PanditSettingController extends GetxController{
   }
 }
 
+class PanditServiesController extends GetxController{
+  final Rx<List<Map<String, dynamic>>> allPujas =  Rx<List<Map<String, dynamic>>>([]);
+  var panditServiceData  = PanditServiceData(add: false).obs;
+  Future<void> samagriFetch() async {
+    await FirebaseFirestore.instance
+        .collection("assets_folder/puja_ceremony_folder/folder")
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        allPujas.value.add({
+          "id": element.id,
+          "name": element['puja_ceremony_name'][0],
+          "selected": false,
+          "duration": "duration",
+          "price":"price",
+        });
+      });
+    });
+  }
+}
+
+class PanditServiceData{
+  bool add;
+  PanditServiceData({required this.add});
+}
+
