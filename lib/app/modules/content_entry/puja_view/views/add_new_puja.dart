@@ -1,27 +1,27 @@
 import 'dart:html';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:management/resources/app_components/custom_widgets.dart';
 
 import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
 import '../controller/puja_add_controller.dart';
 
 class AddNewPuja extends StatefulWidget {
-  final AsyncSnapshot<DocumentSnapshot>? fields ;
-  final bool? edit ;
+  final AsyncSnapshot<DocumentSnapshot>? fields;
+  final bool? edit;
   const AddNewPuja({Key? key, this.fields, this.edit}) : super(key: key);
   @override
   State<AddNewPuja> createState() => _AddNewPujaState();
 }
 
-String pujaId = "PJID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
+String pujaId =
+    "PJID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
 
 class _AddNewPujaState extends State<AddNewPuja> {
-  List<CheckBoxListTileModel> checkBoxListTileModel =
-      CheckBoxListTileModel.getUsers();
   String image =
       'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png';
   HomeController controller = Get.put(HomeController());
@@ -152,57 +152,89 @@ class _AddNewPujaState extends State<AddNewPuja> {
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(1, "Select God tags"),
+                  GodCheckBox(text: "Select tags"),
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(0, "Benefit"),
+                  BenefitCheckBox(text: "Benefit tags"),
                   const SizedBox(
                     height: 20,
-                  ),                 
+                  ),
+                  Obx(() => DropdownButton<String>(
+                        items: <String>[
+                          'Puja for health',
+                          'Puja for Wealth',
+                          'Ceremony Puja'
+                        ].map((String value) {
+                          return DropdownMenuItem<String>(
+                             value: value,
+                              child: Text(value),
+                          );
+                        }).toList(),
+                        hint: Text('${controller.typeOfPuja!.value}'),
+                        onChanged: (value) {                         
+                          controller.typeOfPuja!.update((val) {
+                            val = value;
+                          });                         
+                        },
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   InkWell(
                     onTap: () {
                       Get.defaultDialog(
                           contentPadding: EdgeInsets.all(20),
                           title: "Warning",
-                          content: Text("Are you sure you want to remove ?"),
-                          onConfirm: () {                           
+                          content: Text("Are you sure you want to add ?"),
+                          onConfirm: () {
                             List<String> names = [];
                             List<String> description = [];
                             List<String> benefits = [];
+                            List<String> promises = [];
+                            List<String> gods = [];
+                            for (var element in controller.benefit.value) {
+                              if (element['value'] == true) {
+                                promises.add(element['type']);
+                              }
+                            }
+                            for (var element in controller.god.value) {
+                              if (element['value'] == true) {
+                                gods.add(element['type']);
+                              }
+                            }
                             _name.forEach((element) {
                               names.add(element.text);
                             });
                             _description.forEach((element) {
                               description.add(element.text);
                             });
-                              _benifits.forEach((element) {
+                            _benifits.forEach((element) {
                               benefits.add(element.text);
                             });
-                            Future.delayed(Duration(seconds: 4), () async{
-                             await FirebaseFirestore.instance
+                            Future.delayed(Duration(seconds: 4), () async {
+                              await FirebaseFirestore.instance
                                   .doc(
                                       '/assets_folder/puja_ceremony_folder/folder/$pujaId')
                                   .set({
-                                 'puja_ceremony_keyword': keyword.text,   
+                                'puja_ceremony_keyword': keyword.text,
                                 'puja_ceremony_name':
                                     FieldValue.arrayUnion(names),
                                 'puja_ceremony_description':
                                     FieldValue.arrayUnion(description),
                                 'puja_ceremony_display_picture': image,
                                 'puja_ceremony_god_filter':
-                                    FieldValue.arrayUnion(
-                                        controller.selectedGodList),
-                                'puja_ceremony_benefits_filter':FieldValue.arrayUnion(
-                                        benefits),                                    
+                                    FieldValue.arrayUnion(gods),
+                                'puja_ceremony_benefits_filter':
+                                    FieldValue.arrayUnion(benefits),
                                 'puja_ceremony_standard_price': price.text,
                                 'puja_ceremony_standard_duration':
                                     duration.text,
                                 'puja_ceremony_type_filter':
-                                    controller.pujaType.value,
+                                    controller.typeOfPuja!.value,
                                 'puja_ceremony_id': pujaId,
-                                'puja_ceremony_promise': FieldValue.arrayUnion(
-                                        controller.selectedBenefitList),
+                                'puja_ceremony_promise':
+                                    FieldValue.arrayUnion(promises),
                                 'puja_ceremony_performing_pandits': [],
                                 'puja_ceremony_steps': [],
                                 'puja_ceremony_key_insights': null,
@@ -210,32 +242,39 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                     FieldValue.serverTimestamp()
                               });
                             }).whenComplete(() {
-                              List<Map<String , dynamic>> itemsNeeded=[];
+                              List<Map<String, dynamic>> itemsNeeded = [];
                               int len = controller.foundPlayers.value.length;
                               for (int i = 0; i < len; i++) {
                                 if (controller.foundPlayers.value[i]
-                                ["quantity"] !=
-                                    "quantity") {                                 
+                                        ["quantity"] !=
+                                    "quantity") {
                                   itemsNeeded.add({
-                                    'id': '${controller.foundPlayers.value[i]["id"]}',
-                                    'quantity' :'${controller.foundPlayers.value[i]["quantity"]}',                                   
+                                    'id':
+                                        '${controller.foundPlayers.value[i]["id"]}',
+                                    'quantity':
+                                        '${controller.foundPlayers.value[i]["quantity"]}',
                                   });
                                 }
-                              }                             
-                               controller.states.asMap().forEach((key, value) async{
-                                   Future.delayed(const Duration(seconds: 1),()async{
-                                    await FirebaseFirestore.instance
-                                      .doc('/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
+                              }
+                              controller.states
+                                  .asMap()
+                                  .forEach((key, value) async {
+                                Future.delayed(const Duration(seconds: 1),
+                                    () async {
+                                  await FirebaseFirestore.instance
+                                      .doc(
+                                          '/assets_folder/puja_ceremony_folder/folder/$pujaId/puja_item_folder/${value['name']}')
                                       .set({
-                                        'items' :FieldValue.arrayUnion(itemsNeeded)
-                                      });
-                                      Get.back();
-                                   });
-                                   FirebaseFirestore.instance
-                                      .doc('/assets_folder/puja_ceremony_folder').update({
-                                            'total_puja_ceremony' : FieldValue.increment(1)
-                                      });
-                            });
+                                    'items': FieldValue.arrayUnion(itemsNeeded)
+                                  });
+                                  Get.back();
+                                });
+                                FirebaseFirestore.instance
+                                    .doc('/assets_folder/puja_ceremony_folder')
+                                    .update({
+                                  'total_puja_ceremony': FieldValue.increment(1)
+                                });
+                              });
                             });
                           },
                           onCancel: () {
@@ -305,149 +344,6 @@ class _AddNewPujaState extends State<AddNewPuja> {
     );
   }
 
-  void itemChange(bool val, int index) {
-    setState(() {
-      checkBoxListTileModel[index].isCheck = val;
-    });
-  }
-
-  Widget chipsSelection(int index, String text) {
-    return Obx(() => Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                        children: index == 1
-                            ? controller.selectedGodListWidget
-                            : controller.selectedBeneditListWidget),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                text,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: index == 1
-                            ? controller.gods
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ))
-                                .toList()
-                            : controller.benefit
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ))
-                                .toList(),
-                        //value: selectedGodList[0],
-                        onChanged: (value) {
-                          if (index == 1) {
-                            if (controller.selectedGodList.contains(value)) {
-                              Get.snackbar("Duplicay", "We restricted duplicay",
-                                  backgroundColor:
-                                      context.theme.backgroundColor);
-                            } else {
-                              controller.selectedGodList.add(value as String);
-                              controller.selectedGodListWidget.add(Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Chip(label: Text(value.toString())),
-                              ));
-                            }
-                          } else {
-                            if (controller.selectedBenefitList
-                                .contains(value)) {
-                              Get.snackbar("Duplicay", "We restricted duplicay",
-                                  backgroundColor:
-                                      context.theme.backgroundColor);
-                            } else {
-                              controller.selectedBenefitList
-                                  .add(value as String);
-                              controller.selectedBeneditListWidget.add(Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Chip(label: Text(value.toString())),
-                              ));
-                            }
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 14,
-                        buttonPadding: const EdgeInsets.all(20),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: Colors.black26,
-                          ),
-                        ),
-                        buttonHeight: 70,
-                        buttonWidth: 200,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownWidth: 200,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              TextButton(
-                  onPressed: () {
-                    if (index == 1) {
-                      controller.selectedGodList.clear();
-                      controller.selectedGodListWidget.clear();
-                    } else {
-                      controller.selectedBeneditListWidget.clear();
-                      controller.selectedBenefitList.clear();
-                    }
-                  },
-                  child: Text(
-                    "Clear Selection",
-                    style: TextStyle(color: context.theme.backgroundColor),
-                  ))
-            ],
-          ),
-        ));
-  }
-
   Container redButton(String text) {
     return Container(
       margin: EdgeInsets.all(20),
@@ -498,28 +394,3 @@ class _AddNewPujaState extends State<AddNewPuja> {
   }
 }
 
-class SamagriModel {
-  List<dynamic>? name = [];
-  String? quanatity = '';
-  bool? isChecked = false;
-
-  SamagriModel({this.name, this.quanatity, this.isChecked});
-}
-
-class CheckBoxListTileModel {
-  int? userId;
-  String? title;
-  bool? isCheck;
-
-  CheckBoxListTileModel({this.userId, this.title, this.isCheck});
-
-  static List<CheckBoxListTileModel> getUsers() {
-    return <CheckBoxListTileModel>[
-      CheckBoxListTileModel(userId: 1, title: "Android", isCheck: true),
-      CheckBoxListTileModel(userId: 2, title: "Flutter", isCheck: false),
-      CheckBoxListTileModel(userId: 3, title: "IOS", isCheck: false),
-      CheckBoxListTileModel(userId: 4, title: "PHP", isCheck: false),
-      CheckBoxListTileModel(userId: 5, title: "Node", isCheck: false),
-    ];
-  }
-}

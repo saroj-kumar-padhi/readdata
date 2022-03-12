@@ -1,7 +1,21 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-
+		{
+			"name": "release",
+			"request": "launch",
+			"type": "dart",
+			"program": "lib/main_dev.dart",
+			"args": [
+				"--flavor",
+				"prod",
+                "-d",
+                "chrome",
+                "--web-renderer",
+                "html",
+				"--release"
+			]
+		},
 		{
 			"name": "run_web_dev",
 			"request": "launch",
@@ -33,7 +47,11 @@
 			"program": "lib/main_prod.dart",
 			"args": [
 				"--flavor",
-				"prod"
+				"prod",
+				"-d",
+                "chrome",
+                "--web-renderer",
+                "html"
 			]
 		},
 	]

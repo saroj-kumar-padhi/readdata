@@ -76,14 +76,20 @@ class AddUpdatePuja extends StatelessWidget {
                           }
                           List<Widget> _pujaCards = [];
                           snapshot.data!.docs.forEach((element) {
-                            _pujaCards.add(PujaCards(                             
+                            _pujaCards.add(PujaCards(  
+                            remove: tab=='rp'?true:false,                           
                             text: element['puja_ceremony_name'][0],
+                            deleteOntap: (){
+                              print("delete called");
+                              FirebaseFirestore.instance.doc('assets_folder/puja_ceremony_folder/folder/${element['puja_ceremony_id']}').delete();
+                            },
                             iconData:
                                 element['puja_ceremony_display_picture'],
                             ontap: () {
                               HomeController homeController = Get.put(HomeController());
                               homeController.samagriFetch();
-                              homeController.fetchUpdateSamagri(element['puja_ceremony_id']);                                                          
+                              homeController.fetchUpdateSamagri(element['puja_ceremony_id']);
+                              homeController.fetchGodBenefit(element['puja_ceremony_id']);                                                           
                                Get.bottomSheet(                                
                                  Container(                                 
                                   height: Get.height,
@@ -100,7 +106,7 @@ class AddUpdatePuja extends StatelessWidget {
                             },
                             ));
                           });
-                          if (tab == 'up') {
+                          if (tab == 'up' || tab == 'rp') {
                             return SingleChildScrollView(
                               scrollDirection: Axis.vertical,
                               child: Wrap(                              

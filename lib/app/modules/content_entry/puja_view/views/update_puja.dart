@@ -1,9 +1,9 @@
 import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:management/resources/app_components/custom_widgets.dart';
 
 import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
@@ -155,11 +155,11 @@ class _UpdatePujaState extends State<UpdatePuja> {
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(1, "Update Select God tags"),
+                  GodCheckBox(text:"Update select God tags"),
                   const SizedBox(
                     height: 20,
                   ),
-                  chipsSelection(0, "Update Benefit"),
+                  BenefitCheckBox(text:"Update benefit"),
                   const SizedBox(
                     height: 20,
                   ),                 
@@ -173,6 +173,19 @@ class _UpdatePujaState extends State<UpdatePuja> {
                             List<String> names = [];
                             List<String> description = [];
                             List<String> benefits = [];
+                             List<String> promises = [];
+                            List<String> gods = [];
+                            String type;
+                            for (var element in controller.benefit.value) {
+                             if(element['value']==true){
+                               promises.add(element['type']);
+                             }
+                            }
+                             for (var element in controller.god.value) {
+                             if(element['value']==true){
+                               gods.add(element['type']);
+                             }
+                            }
                             _name.forEach((element) {
                               names.add(element.text);
                             });
@@ -195,17 +208,16 @@ class _UpdatePujaState extends State<UpdatePuja> {
                                 'puja_ceremony_display_picture': image,
                                 'puja_ceremony_god_filter':
                                     FieldValue.arrayUnion(
-                                        controller.selectedGodList),
+                                        gods),
                                 'puja_ceremony_benefits_filter':FieldValue.arrayUnion(
                                         benefits),                                    
                                 'puja_ceremony_standard_price': price.text,
                                 'puja_ceremony_standard_duration':
                                     duration.text,
-                                'puja_ceremony_type_filter':
-                                    controller.pujaType.value,
+                                'puja_ceremony_type_filter':  controller.typeOfPuja!.value,
                                 'puja_ceremony_id': widget.pujaId,
                                 'puja_ceremony_promise': FieldValue.arrayUnion(
-                                        controller.selectedBenefitList),
+                                        promises),
                                 'puja_ceremony_performing_pandits': [],
                                 'puja_ceremony_steps': [],
                                 'puja_ceremony_key_insights': null,
@@ -306,142 +318,6 @@ class _UpdatePujaState extends State<UpdatePuja> {
         ],
       ),
     );
-  }
-  Widget chipsSelection(int index, String text) {
-    return Obx(() => Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                        children: index == 1
-                            ? controller.selectedGodListWidget
-                            : controller.selectedBeneditListWidget),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                text,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        items: index == 1
-                            ? controller.gods
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ))
-                                .toList()
-                            : controller.benefit
-                                .map((item) => DropdownMenuItem<String>(
-                                      value: item,
-                                      child: Text(
-                                        item,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ))
-                                .toList(),
-                        //value: selectedGodList[0],
-                        onChanged: (value) {
-                          if (index == 1) {
-                            if (controller.selectedGodList.contains(value)) {
-                              Get.snackbar("Duplicay", "We restricted duplicay",
-                                  backgroundColor:
-                                      context.theme.backgroundColor);
-                            } else {
-                              controller.selectedGodList.add(value as String);
-                              controller.selectedGodListWidget.add(Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Chip(label: Text(value.toString())),
-                              ));
-                            }
-                          } else {
-                            if (controller.selectedBenefitList
-                                .contains(value)) {
-                              Get.snackbar("Duplicay", "We restricted duplicay",
-                                  backgroundColor:
-                                      context.theme.backgroundColor);
-                            } else {
-                              controller.selectedBenefitList
-                                  .add(value as String);
-                              controller.selectedBeneditListWidget.add(Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Chip(label: Text(value.toString())),
-                              ));
-                            }
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.arrow_forward_ios_outlined,
-                        ),
-                        iconSize: 14,
-                        buttonPadding: const EdgeInsets.all(20),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: Colors.black26,
-                          ),
-                        ),
-                        buttonHeight: 70,
-                        buttonWidth: 200,
-                        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-                        dropdownMaxHeight: 200,
-                        dropdownWidth: 200,
-                        scrollbarRadius: const Radius.circular(40),
-                        scrollbarThickness: 6,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              TextButton(
-                  onPressed: () {
-                    if (index == 1) {
-                      controller.selectedGodList.clear();
-                      controller.selectedGodListWidget.clear();
-                    } else {
-                      controller.selectedBeneditListWidget.clear();
-                      controller.selectedBenefitList.clear();
-                    }
-                  },
-                  child: Text(
-                    "Clear Selection",
-                    style: TextStyle(color: context.theme.backgroundColor),
-                  ))
-            ],
-          ),
-        ));
   }
 
   Container redButton(String text) {

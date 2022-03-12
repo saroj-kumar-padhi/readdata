@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../../../resources/app_exports.dart';
 
 class HomeController extends GetxController {
+
+
   final List<Map<String, dynamic>> states = [
     {"code": "AN", "name": "Andaman and Nicobar Islands"},
     {"code": "AP", "name": "Andhra Pradesh"},
@@ -45,36 +47,27 @@ class HomeController extends GetxController {
   final List<Map<String, dynamic>> allSamagris = [];
   final Rx<List<Map<String, dynamic>>> foundPlayers =
       Rx<List<Map<String, dynamic>>>([]);
-  RxList<String> selectedGodList = <String>[].obs;
-  RxList<Widget> selectedGodListWidget = <Widget>[].obs;
-  RxList<String> selectedBenefitList = <String>[].obs;
-  RxList<Widget> selectedBeneditListWidget = <Widget>[].obs;
   RxString? keyword = ''.obs;
   RxString? price = ''.obs;
   RxString? duration = ''.obs;
-  List<String> gods = [
-    'god shiva',
-    'god vishnu',
-    'god laxmi',
-    'god durga',
-    'god kali',
-    'god ganesh',
-    'god anapurna',
-    'god parwati',
-  ];
-
-  List<String> benefit = [
-    'Hapiness',
-    'Health',
-    'Wealth',
-  ];
-  List<String> typeOfPuja = [
-    'Puja for health',
-    'Puja for wealth',
-    'Puja for santi',
-  ];
-  RxString pujaType = 'Puja for health'.obs;
-
+  RxString? typeOfPuja = 'Puja for health'.obs;
+  final Rx<List<Map<String, dynamic>>> benefit =
+      Rx<List<Map<String, dynamic>>>([{
+    'type':'Hapiness',
+    'value' :false,
+  },{
+    'type':'Wealth',
+    'value' :false,
+  }]);
+ final Rx<List<Map<String, dynamic>>> god =
+      Rx<List<Map<String, dynamic>>>([{
+    'type':'god vishnu',
+    'value' :false,
+  },{
+    'type':'god shiva',
+    'value' :false,
+  }]);
+ 
   @override
   void onInit() {
     super.onInit();
@@ -117,6 +110,42 @@ class HomeController extends GetxController {
            if(selement['id']==element['id']){
              selement['quantity'] = element['quantity'];
              selement['selected'] = true;
+           }
+         }         
+        });           
+      });
+     });
+  }
+
+  fetchGodBenefit(String puja) {
+    FirebaseFirestore.instance
+        .doc(
+            'assets_folder/puja_ceremony_folder/folder/$puja')
+        .get()
+        .then((value) {            
+      god.update((val) {
+         List<dynamic> updatedSamagri = value.data()!['puja_ceremony_god_filter'];       
+        updatedSamagri.forEach((element) { 
+         for (var selement in val!) { 
+           if(updatedSamagri.contains(selement['type'])){
+             selement['value'] =true;            
+           }
+         }         
+        });           
+      });
+     });
+
+      FirebaseFirestore.instance
+        .doc(
+            'assets_folder/puja_ceremony_folder/folder/$puja')
+        .get()
+        .then((value) {            
+      benefit.update((val) {
+         List<dynamic> updatedSamagri = value.data()!['puja_ceremony_promise'];       
+        updatedSamagri.forEach((element) { 
+         for (var selement in val!) { 
+           if(updatedSamagri.contains(selement['type'])){
+             selement['value'] =true;            
            }
          }         
         });           
