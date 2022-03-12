@@ -13,7 +13,9 @@ import '../controller/puja_add_controller.dart';
 class AddNewPuja extends StatefulWidget {
   final AsyncSnapshot<DocumentSnapshot>? fields;
   final bool? edit;
+
   const AddNewPuja({Key? key, this.fields, this.edit}) : super(key: key);
+
   @override
   State<AddNewPuja> createState() => _AddNewPujaState();
 }
@@ -167,15 +169,15 @@ class _AddNewPujaState extends State<AddNewPuja> {
                           'Ceremony Puja'
                         ].map((String value) {
                           return DropdownMenuItem<String>(
-                             value: value,
-                              child: Text(value),
+                            value: value,
+                            child: Text(value),
                           );
                         }).toList(),
                         hint: Text('${controller.typeOfPuja!.value}'),
-                        onChanged: (value) {                         
+                        onChanged: (value) {
                           controller.typeOfPuja!.update((val) {
                             val = value;
-                          });                         
+                          });
                         },
                       )),
                   const SizedBox(
@@ -393,4 +395,3 @@ class _AddNewPujaState extends State<AddNewPuja> {
     );
   }
 }
-

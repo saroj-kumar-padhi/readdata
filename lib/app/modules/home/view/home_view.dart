@@ -5,6 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:management/resources/app_strings.dart';
 import 'package:management/resources/responshive.dart';
 
+import '../../../purohit_profile_mgmt/all_prohit_profiles.dart';
 import '../../management/view/user_management_view.dart';
 class HomeView extends StatelessWidget{
   HomeView({Key? key,}) : super(key: key);
@@ -46,7 +47,7 @@ class HomeView extends StatelessWidget{
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     elevation: 2,
-                    child: tab == AppStrings.CONTENT_ENTRY? ContentEntryView(id: '',):UserManagementView(id: 'id'),
+                    child: tab == AppStrings.CONTENT_ENTRY? ContentEntryView(id: '',):const AllProhit(),
                   ),
                 ),
               )
