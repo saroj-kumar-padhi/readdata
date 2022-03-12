@@ -90,9 +90,10 @@ class AddUpdatePuja extends StatelessWidget {
                               homeController.samagriFetch();
                               homeController.fetchUpdateSamagri(element['puja_ceremony_id']);
                               homeController.fetchGodBenefit(element['puja_ceremony_id']);                                                           
-                               Get.bottomSheet(                                
-                                 Container(                                 
-                                  height: Get.height,
+                               Get.bottomSheet(                                                                 
+                                 Container(
+                                   padding: const EdgeInsets.only(top: 20),                                                                    
+                                  height: Get.height*0.9,
                                   child:  UpdatePuja(
                                     keyword: TextEditingController(text: element['puja_ceremony_keyword']),
                                     price:  TextEditingController(text: element['puja_ceremony_standard_price']),
@@ -102,7 +103,10 @@ class AddUpdatePuja extends StatelessWidget {
                                     updateName: element['puja_ceremony_name'],
                                     updateDescription: element['puja_ceremony_description'],
                                   )
-                                ),backgroundColor: context.theme.backgroundColor);
+                                ),
+                                backgroundColor: context.theme.backgroundColor,
+                                isScrollControlled: true
+                                );
                             },
                             ));
                           });

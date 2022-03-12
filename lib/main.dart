@@ -7,7 +7,7 @@ import 'package:management/app/modules/management/view/pandit_user_details.dart'
 import 'package:management/resources/app_config.dart';
 import 'package:management/resources/app_strings.dart';
 import 'package:system_theme/system_theme.dart';
-import 'app/modules/content_entry/puja_view/views/add_update_puja.dart';
+import 'app/modules/content_entry/puja_view/views/puja_tab.dart';
 import 'app/modules/home/view/home_view.dart';
 import 'app/modules/management/view/client_users_list.dart';
 import 'app/modules/management/view/pandit_users_list.dart';
