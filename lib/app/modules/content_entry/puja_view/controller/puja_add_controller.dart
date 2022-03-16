@@ -89,7 +89,8 @@ class HomeController extends GetxController {
           "id": element.id,
           "name": element['puja_item_name'][0],
           "selected": false,
-          "quantity": 'quantity'
+          "quantity": 'quantity',
+          "type" : "deliver"
         });
       });
     }).whenComplete(() {

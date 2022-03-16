@@ -57,7 +57,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
           ? EdgeInsets.all(0)
-          : EdgeInsets.only(left: Get.width * 0.15, right: Get.width * 0.07),
+          : EdgeInsets.only(left: Get.width * 0.05, right: Get.width * 0.05),
       child: Row(
         children: [
           Expanded(
@@ -255,6 +255,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                         '${controller.foundPlayers.value[i]["id"]}',
                                     'quantity':
                                         '${controller.foundPlayers.value[i]["quantity"]}',
+                                     'type' :  '${controller.foundPlayers.value[i]["type"]}',
                                   });
                                 }
                               }
@@ -318,17 +319,44 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                   });
                                 }),
                             trailing: SizedBox(
-                              width: 100,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: controller
-                                        .foundPlayers.value[index]['quantity']),
-                                onChanged: (value) {
-                                  controller.foundPlayers.update((val) {
-                                    val![index]['quantity'] = value;
-                                  });
-                                },
+                              width: 300,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 100,
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: controller
+                                              .foundPlayers.value[index]['quantity']),
+                                      onChanged: (value) {
+                                        controller.foundPlayers.update((val) {
+                                          val![index]['quantity'] = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                   SizedBox(
+                                     width: 200,
+                                     child: Obx(() => DropdownButton<String>(
+                                        items: <String>[
+                                          'deliver',
+                                          'non_deliver',                                                                              
+                                        ].map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        hint: Text('${controller.foundPlayers.value[index]['type'] }'),
+                                        onChanged: (value) {
+                                          controller.foundPlayers.update((val) {
+                                          val![index]['type'] = value;
+                                        });
+                                        },
+                                      )),
+                                   ),
+                                ],
                               ),
                             ),
                             title: Text(
@@ -375,7 +403,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
             hintText: hintText,
 
             //make hint text
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: Colors.grey,
               fontSize: 16,
               fontFamily: "verdana_regular",
@@ -385,7 +413,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
             //create lable
             labelText: hintText,
             //lable style
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               color: Colors.grey,
               fontSize: 16,
               fontFamily: "verdana_regular",
