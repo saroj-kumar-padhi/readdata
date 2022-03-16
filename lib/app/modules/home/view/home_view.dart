@@ -47,7 +47,7 @@ class HomeView extends StatelessWidget{
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     elevation: 2,
-                    child: tab == AppStrings.CONTENT_ENTRY? ContentEntryView(id: '',):const AllProhit(),
+                    child: tab == AppStrings.CONTENT_ENTRY? ContentEntryView(id: '',):UserManagementView(id: ''),
                   ),
                 ),
               )
