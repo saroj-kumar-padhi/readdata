@@ -214,7 +214,7 @@ class _UpdatePujaState extends State<UpdatePuja> {
                                 'puja_ceremony_standard_price': price.text,
                                 'puja_ceremony_standard_duration':
                                     duration.text,
-                                'puja_ceremony_type_filter':  controller.typeOfPuja!.value,
+                                'puja_ceremony_type_filter':  controller.typeOfPuja.value,
                                 'puja_ceremony_id': widget.pujaId,
                                 'puja_ceremony_promise': FieldValue.arrayUnion(
                                         promises),
