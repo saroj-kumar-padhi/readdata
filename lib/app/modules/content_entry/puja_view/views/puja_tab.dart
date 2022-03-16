@@ -15,6 +15,21 @@ class AddUpdatePuja extends StatelessWidget {
   String tab = Get.parameters['tab']!;
   @override
   Widget build(BuildContext context) {
+    Widget confirmBtn() {
+      return ElevatedButton(onPressed: () {
+        Get.toNamed(
+            '/home/${AppStrings.CONTENT_ENTRY}/update_puja/rp');
+        Get.back();
+        Get.snackbar("Puja Delete Status", "Puja Deleted Successfully");
+      }, child: Text("Confirm"));
+    }
+
+
+    Widget cancelBtn() {
+      return ElevatedButton(onPressed: () {
+        Get.back();
+      }, child: Text("Cancel"));
+    }
     return Scaffold(
       body: Stack(
         children: [
@@ -52,8 +67,16 @@ class AddUpdatePuja extends StatelessWidget {
                           titleText: 'Remove Puja',
                           tab: tab,
                           onTap: () {
-                            Get.toNamed(
-                                '/home/${AppStrings.CONTENT_ENTRY}/update_puja/rp');
+                            Get.defaultDialog(
+                              title: "Puja Alert",
+                              middleText: "Your Puja will be deleted on clicking the confirm button..",
+                              //content: getContent(),
+                              barrierDismissible: false,
+                              radius: 50.0,
+                              confirm: confirmBtn(),
+                              cancel: cancelBtn(),
+                            );
+
                           },
                         ),
                       ],
