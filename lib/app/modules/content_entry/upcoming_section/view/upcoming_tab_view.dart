@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:management/app/modules/content_entry/upcoming_section/view/add_upcoming_view.dart';
+import 'package:management/app/modules/content_entry/upcoming_section/view/update_upcoming.dart';
 import 'package:management/resources/app_components/function_cards.dart';
 import 'package:management/resources/app_components/menu_bar_tiles.dart';
 import 'package:management/resources/app_exports.dart';
@@ -75,9 +76,9 @@ class UpcomingTab extends StatelessWidget {
                               child: CircularProgressIndicator(),
                             );
                           }
-                          List<Widget> _pujaCards = [];
+                          List<Widget> _eventCards = [];
                           snapshot.data!.docs.forEach((element) {
-                            _pujaCards.add(PujaCards(  
+                            _eventCards.add(EventCards(
                             remove: tab=='rp'?true:false,                           
                             text: element['name'],
                             deleteOntap: (){
@@ -87,7 +88,25 @@ class UpcomingTab extends StatelessWidget {
                             iconData:
                                 element['image'],
                             ontap: () {
-                              
+                              print(element["image"]);
+                              //AddUpcomingController addUpcomingController =Get.put(AddUpcomingController());
+
+                              Get.bottomSheet(
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 20),
+                                    height: Get.height*0.9,
+                                    child: UpdateUpcoming(
+                                      eventId: element.id,
+                                      image: element["image"],
+                                      updateName: element['name'],
+                                      updateLocation: element["detail"],
+                                      updatePosition: element["num"],
+                                    ),
+                                  ),
+                                  backgroundColor: context.theme.backgroundColor,
+                                  isScrollControlled: true
+                              );
+
                             },
                             ));
                           });
@@ -96,7 +115,7 @@ class UpcomingTab extends StatelessWidget {
                               scrollDirection: Axis.vertical,
                               child: Wrap(                              
                                 direction: Axis.horizontal,
-                                children: _pujaCards,
+                                children: _eventCards,
                               ),
                             );
                           } else if (tab == 'an') {
