@@ -102,7 +102,9 @@ class UpcomingTab extends StatelessWidget {
                                       updateLocation: element["detail"],
                                       updatePosition: element["num"],
                                     ),
-                                  )
+                                  ),
+                                  backgroundColor: context.theme.backgroundColor,
+                                  isScrollControlled: true
                               );
 
                             },

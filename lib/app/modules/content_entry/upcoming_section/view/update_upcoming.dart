@@ -32,13 +32,13 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _name =TextEditingController(text:widget.updateName);
-    addEventTextField(_name, "Upcoming Name");
+    //addEventTextField(_name, "Upcoming Name");
 
     TextEditingController _position =TextEditingController(text: '${widget.updatePosition}');
-    addEventTextField(_position, "Upcoming Position ");
+    //addEventTextField(_position, "Upcoming Position ");
 
     TextEditingController _location =TextEditingController(text:widget.updateLocation);
-    addEventTextField(_location, "Upcoming Location ");
+    //addEventTextField(_location, "Upcoming Location ");
     // TextEditingController keyword = widget.keyword;
     // TextEditingController price = widget.price;
     // TextEditingController duration = widget.duration;
@@ -112,8 +112,11 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                               ));
                         },
                         child: const Text("Edit")),
-                  ),                
-                 
+                  ),
+                addEventTextField(_name, "Upcoming Name"),
+                addEventTextField(_position, "Upcoming Position "),
+                addEventTextField(_location, "Upcoming Location "),
+
                   InkWell(
                     onTap: () {
                       Get.defaultDialog(
@@ -148,19 +151,19 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                                   '/PujaPurohitFiles/commonCollections/upcoming/#${widget.updatePosition}')
                                   .update({
 
-                                'name':_name,
-                                "detail":_location,
+                                'name':widget.updateName,
+                                "detail":widget.updateLocation,
                                 'image': image,
-                                "nick":_name,
+                                "nick":widget.updateName,
                                 'end' :'',
                                 'duration' :'',
                                 'date':'',
                                 "begin":".",
                                 'color': ".",
-                                'keyword' : _location,
-                                'link' : _location,
+                                'keyword' : widget.updateLocation,
+                                'link' : widget.updateLocation,
                                 'muhrat': '',
-                                'num': _position,
+                                'num': widget.updatePosition,
                               });
                             });
                           },
