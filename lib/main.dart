@@ -7,8 +7,8 @@ import 'package:management/app/modules/management/view/pandit_user_details.dart'
 import 'package:management/resources/app_config.dart';
 import 'package:management/resources/app_strings.dart';
 import 'package:system_theme/system_theme.dart';
-import 'app/modules/content_entry/puja_view/views/puja_tab.dart';
-import 'app/modules/content_entry/upcoming_section/view/add_upcoming_view.dart';
+import 'app/modules/content_entry/detail_section/view/add_detail_view.dart';
+import 'app/modules/content_entry/puja_section/views/puja_tab.dart';
 import 'app/modules/content_entry/upcoming_section/view/upcoming_tab_view.dart';
 import 'app/modules/home/view/home_view.dart';
 import 'app/modules/management/view/client_users_list.dart';
@@ -65,8 +65,8 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/update_puja/:tab', page: ()=>AddUpdatePuja(),                      
            ),
            GetPage(name: '/samagri', page:()=>SamagriAddDelete()),
-            GetPage(name: '/upcoming/:tab', page: ()=>UpcomingTab(),                      
-           ),
+            GetPage(name: '/upcoming/:tab', page: ()=>UpcomingTab(),),
+            GetPage(name: '/detail', page:()=>AddUpdateDetailView()),                    
           ]
           )
       ],

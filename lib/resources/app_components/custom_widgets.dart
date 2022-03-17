@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:management/app/modules/content_entry/puja_view/controller/puja_add_controller.dart';
-
+import '../../app/modules/content_entry/puja_section/controller/puja_add_controller.dart';
 import '../app_exports.dart';
 
 class GodCheckBox extends GetView {

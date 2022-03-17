@@ -2,14 +2,12 @@ import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:management/app/modules/content_entry/puja_view/controller/puja_add_controller.dart';
-import 'package:management/app/modules/content_entry/puja_view/views/update_puja.dart';
 import 'package:management/app/modules/content_entry/upcoming_section/view/add_upcoming_view.dart';
 import 'package:management/resources/app_components/function_cards.dart';
 import 'package:management/resources/app_components/menu_bar_tiles.dart';
 import 'package:management/resources/app_exports.dart';
 import '../../../../../resources/app_strings.dart';
-import '../../puja_view/views/add_new_puja.dart';
+
 
 
 class UpcomingTab extends StatelessWidget {

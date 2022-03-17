@@ -18,7 +18,8 @@ class ContentEntryView extends StatelessWidget{
           FunctionCards(iconData: CupertinoIcons.bolt_horizontal_circle ,text: 'Puja',ontap: (){Get.toNamed('/home/${AppStrings.CONTENT_ENTRY}/update_puja/up');},),
           FunctionCards(iconData: CupertinoIcons.archivebox,text: 'Samagri',ontap: (){Get.toNamed('/home/${AppStrings.CONTENT_ENTRY}/samagri');},),
           FunctionCards(iconData: CupertinoIcons.calendar,text: 'Add Upcoming',ontap: (){Get.toNamed('/home/${AppStrings.CONTENT_ENTRY}/upcoming/up');},),
-          FunctionCards(iconData: CupertinoIcons.tv_circle ,text: 'Change Banner',),
+          FunctionCards(iconData: CupertinoIcons.device_laptop ,text: 'Change Banner',),
+          FunctionCards(iconData: CupertinoIcons.viewfinder ,text: 'Add Detail',ontap: (){Get.toNamed('/home/${AppStrings.CONTENT_ENTRY}/detail');},),
 
           ],
         )
