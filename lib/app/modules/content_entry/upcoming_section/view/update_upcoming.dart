@@ -17,7 +17,7 @@ class UpdateUpcoming extends StatefulWidget {
   // final TextEditingController duration;
   final String  updateName;
   final  String updateLocation;
-  final  String updatePosition;
+  final  int updatePosition;
   const UpdateUpcoming({Key? key,required this.eventId, required this.updateName,required this.updateLocation, required this.updatePosition,}) : super(key: key);
   @override
   State<UpdateUpcoming> createState() => _UpdateUpcomingState();
@@ -34,7 +34,7 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
     TextEditingController _name =TextEditingController(text:widget.updateName);
     addEventTextField(_name, "Upcoming Name");
 
-    TextEditingController _position =TextEditingController(text: widget.updatePosition);
+    TextEditingController _position =TextEditingController(text: '${widget.updatePosition}');
     addEventTextField(_position, "Upcoming Position ");
 
     TextEditingController _location =TextEditingController(text:widget.updateLocation);
@@ -112,45 +112,8 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                               ));
                         },
                         child: const Text("Edit")),
-                  ),
-                  // ExpandablePanel(
-                  //     header: redButton("Update Name"),
-                  //     collapsed: const SizedBox(),
-                  //     expanded: Column(children: _nameTextFields)),
-                  // ExpandablePanel(
-                  //     header: redButton("Update Description"),
-                  //     collapsed: const SizedBox(),
-                  //     expanded: Column(children: _descriptionTextFields)),
-                  // ExpandablePanel(
-                  //     header: redButton("Update Benefits"),
-                  //     collapsed: const SizedBox(),
-                  //     expanded: Column(children: _benefits)),
-                  // ExpandablePanel(
-                  //   header: addPujaTextField(keyword, "Update Puja Keyword"),
-                  //   collapsed: const SizedBox(),
-                  //   expanded: const SizedBox(),
-                  // ),
-                  // ExpandablePanel(
-                  //   header: addPujaTextField(duration, "Update Puja Duration"),
-                  //   collapsed: const SizedBox(),
-                  //   expanded: SizedBox(),
-                  // ),
-                  // ExpandablePanel(
-                  //   header: addPujaTextField(price, "Update Puja price"),
-                  //   collapsed: const SizedBox(),
-                  //   expanded: SizedBox(),
-                  // ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  GodCheckBox(text:"Update select God tags"),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  BenefitCheckBox(text:"Update benefit"),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  ),                
+                 
                   InkWell(
                     onTap: () {
                       Get.defaultDialog(
