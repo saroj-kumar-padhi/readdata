@@ -12,20 +12,21 @@ import '../controller/add_upcoming_controller.dart';
 
 class UpdateUpcoming extends StatefulWidget {
   final String eventId;
+   final String image;
   // final TextEditingController keyword ;
   // final TextEditingController price;
   // final TextEditingController duration;
   final String  updateName;
   final  String updateLocation;
   final  int updatePosition;
-  const UpdateUpcoming({Key? key,required this.eventId, required this.updateName,required this.updateLocation, required this.updatePosition,}) : super(key: key);
+  const UpdateUpcoming({Key? key,required this.image,required this.eventId, required this.updateName,required this.updateLocation, required this.updatePosition,}) : super(key: key);
   @override
   State<UpdateUpcoming> createState() => _UpdateUpcomingState();
 }
 
 
 class _UpdateUpcomingState extends State<UpdateUpcoming> {
-  String image =
+  String image2 =
       'https://www.kindpng.com/picc/m/78-785827_user-profile-avatar-login-account-male-user-icon.png';
   AddUpcomingController controller = Get.put(AddUpcomingController());
 
@@ -61,7 +62,7 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                     height: 100,
                     width: 100,
                     decoration: BoxDecoration(
-                      image: DecorationImage(image: NetworkImage(image)),
+                      image: DecorationImage(image: widget.image==""?NetworkImage(image2):NetworkImage(widget.image)),
                     ),
                     child: TextButton(
                         onPressed: () {
@@ -100,7 +101,8 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                                             await snapshot.ref
                                                 .getDownloadURL();
                                             setState(() {
-                                              image = downloadUrl;
+                                              image2 = downloadUrl;
+                                              widget.image!=downloadUrl;
                                               //widget.onPressed(downloadUrl);
                                             });
                                           });
@@ -153,7 +155,7 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
 
                                 'name':widget.updateName,
                                 "detail":widget.updateLocation,
-                                'image': image,
+                                'image': image2,
                                 "nick":widget.updateName,
                                 'end' :'',
                                 'duration' :'',

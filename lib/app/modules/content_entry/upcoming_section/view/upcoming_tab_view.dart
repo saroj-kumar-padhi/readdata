@@ -88,13 +88,16 @@ class UpcomingTab extends StatelessWidget {
                             iconData:
                                 element['image'],
                             ontap: () {
+                              print(element["image"]);
                               //AddUpcomingController addUpcomingController =Get.put(AddUpcomingController());
 
                               Get.bottomSheet(
                                   Container(
                                     padding: const EdgeInsets.only(top: 20),
                                     height: Get.height*0.9,
-                                    child: UpdateUpcoming(eventId: element.id,
+                                    child: UpdateUpcoming(
+                                      eventId: element.id,
+                                      image: element["image"],
                                       updateName: element['name'],
                                       updateLocation: element["detail"],
                                       updatePosition: element["num"],
