@@ -5,19 +5,22 @@ import 'package:management/resources/app_exports.dart';
 class AddUpdateDetailController extends GetxController{
   var detailData = AddUpdateDetailData().obs;
 
-  @override
-  void onInit(){
+  
+   @override
+  void onInit() {
     super.onInit();
     addBlankText();
-    }
+  }
+
+
   addBlankText(){
-   for(int i=0;i<10;i++){
-     detailData.value.begin1!.add("");
-     detailData.value.end1!.add("");
-     detailData.value.name1!.add("");
-     detailData.value.vikram1!.add("");
-     detailData.value.date1!.add("");     
-   }
+    detailData.update((val) {
+      val!.begin1 = List.generate(10, (index) => "");
+      val.date1 = List.generate(10, (index) => "");
+      val.end1 = List.generate(10, (index) => "");
+      val.name1 = List.generate(10, (index) => "");
+      val.vikram1 = List.generate(10, (index) => "");
+    });
   }
 
 }

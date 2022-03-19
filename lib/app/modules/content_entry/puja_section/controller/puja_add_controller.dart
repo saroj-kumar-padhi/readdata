@@ -114,7 +114,7 @@ class HomeController extends GetxController {
       value.docs.forEach((element) {
         allSamagris.add({
           "id": element.id,
-          "name": element['puja_item_name'][0],
+          "name": element['puja_item_name'][1],
           "selected": false,
           "quantity": 'quantity',
           "type" : "deliver"
@@ -189,7 +189,7 @@ class HomeController extends GetxController {
       value.docs.forEach((element) {
         allSamagris.add({
           "id": element.id,
-          "name": element['puja_item_name'][0],
+          "name": element['puja_item_name'][1],
           "selected": false,
           "quantity": 'quantity'
         });

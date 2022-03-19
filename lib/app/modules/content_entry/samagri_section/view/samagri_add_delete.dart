@@ -2,7 +2,9 @@ import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:management/resources/app_components/custom_widgets.dart';
 import 'package:management/resources/app_exports.dart';
+import 'package:management/resources/app_functions.dart';
 
 class SamagriAddDelete extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _SamagriAddDeleteState extends State<SamagriAddDelete> {
 
   @override
   Widget build(BuildContext context) {
+   
     List<TextEditingController> _newName =
         List.generate(11, (i) => TextEditingController());
     List<Widget> _newNameTextFields = List.generate(
@@ -27,6 +30,8 @@ class _SamagriAddDeleteState extends State<SamagriAddDelete> {
     );  
     String sId =
     "SID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
+    TextEditingController newname =TextEditingController();
+    TextEditingController newdescription =TextEditingController(); 
    TextEditingController newSamagriPrice = TextEditingController();
     TextEditingController newSamagriMargin = TextEditingController();
     SamagriController samagriController = Get.put(SamagriController());
@@ -59,31 +64,19 @@ class _SamagriAddDeleteState extends State<SamagriAddDelete> {
                             scrollDirection: Axis.vertical,
                             child: Column(                            
                               children: [
-                                Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(children: _newNameTextFields,)),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Column(children: _newDescriptionTextFields,))
-                                    ],
-                                  ),
-                                   addSamagriTextField(newSamagriPrice, "Standard Price"),
-                                     addSamagriTextField(newSamagriMargin, "Samagri margin"),
+                                addCustomTextField(newname, "Name"),
+                                addSamagriTextField(newdescription, "Description"),
+                                addSamagriTextField(newSamagriPrice, "Standard Price"),
+                                addSamagriTextField(newSamagriMargin, "Samagri margin"),
+                                  
 
                                     InkWell(
-                                      onTap: (){
-                                        List<String> names =[];
-                                        List<String> description = [];
-                                         _newName.forEach((element) {
-                                            names.add(element.text);
-                                          });
-                                          _newDescription.forEach((element) {
-                                            description.add(element.text);
-                                          });
+                                      onTap: ()async{
+                                       final List<String> names = await translate(newname.text);
+                                       final List<String> description = await translate(newdescription.text);
+                                                                           
 
-                                          FirebaseFirestore.instance.doc('assets_folder/puja_items_folder/folder/$sId}').update({
+                                         await FirebaseFirestore.instance.doc('assets_folder/puja_items_folder/folder/$sId').set({
                                             'puja_item_description':FieldValue.arrayUnion(description),
                                             'puja_item_name' :FieldValue.arrayUnion(names),
                                             'puja_item_price' : newSamagriPrice.text,
@@ -92,6 +85,7 @@ class _SamagriAddDeleteState extends State<SamagriAddDelete> {
                                             'puja_item_display_picture':'https://i.etsystatic.com/18640148/r/il/89d229/2073623160/il_794xN.2073623160_nq7m.jpg'
 
                                           });
+                                          Get.back();
                                           Get.showSnackbar(const GetSnackBar(message: 'Updated samgri',duration: Duration(seconds: 2),));
                                       },
                                       child: redButton('Submit'))

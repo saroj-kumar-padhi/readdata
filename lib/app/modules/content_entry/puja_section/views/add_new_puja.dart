@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:management/app/purohit_profile_mgmt/reusable_widgets.dart';
 import 'package:management/resources/app_components/custom_widgets.dart';
 
 import '../../../../../resources/app_exports.dart';
+import '../../../../../resources/app_functions.dart';
 import '../../../../../resources/responshive.dart';
 import '../controller/puja_add_controller.dart';
 
@@ -53,6 +55,9 @@ class _AddNewPujaState extends State<AddNewPuja> {
     TextEditingController keyword = TextEditingController();
     TextEditingController price = TextEditingController();
     TextEditingController duration = TextEditingController();
+    TextEditingController name = TextEditingController();
+    TextEditingController benefit = TextEditingController();
+    TextEditingController description = TextEditingController();
 
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
@@ -124,33 +129,49 @@ class _AddNewPujaState extends State<AddNewPuja> {
                         },
                         child: Text("Edit")),
                   ),
-                  ExpandablePanel(
-                      header: redButton("Add Name"),
-                      collapsed: const SizedBox(),
-                      expanded: Column(children: _nameTextFields)),
-                  ExpandablePanel(
-                      header: redButton("Add Description"),
-                      collapsed: const SizedBox(),
-                      expanded: Column(children: _descriptionTextFields)),
-                  ExpandablePanel(
-                      header: redButton("Add Benefits"),
-                      collapsed: const SizedBox(),
-                      expanded: Column(children: _benefits)),
-                  ExpandablePanel(
-                    header: addCustomTextField(keyword, "Puja Keyword"),
-                    collapsed: const SizedBox(),
-                    expanded: const SizedBox(),
-                  ),
-                  ExpandablePanel(
-                    header: addCustomTextField(duration, "Puja Duration"),
-                    collapsed: const SizedBox(),
-                    expanded: SizedBox(),
-                  ),
-                  ExpandablePanel(
-                    header: addCustomTextField(price, "Puja price"),
-                    collapsed: const SizedBox(),
-                    expanded: SizedBox(),
-                  ),
+                  addCustomTextField(name, "Name"),
+                  Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: TextFormField(
+        maxLines: 10,
+        minLines: 1,
+        keyboardType: TextInputType.multiline,
+          controller: description,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.blue, width: 1.0),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            fillColor: Colors.grey,
+
+            hintText: "Description",
+
+            //make hint text
+            hintStyle: const TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+              fontFamily: "verdana_regular",
+              fontWeight: FontWeight.w400,
+            ),
+
+            //create lable
+            labelText: "Description",
+            //lable style
+            labelStyle: const TextStyle(
+              color: Colors.grey,
+              fontSize: 16,
+              fontFamily: "verdana_regular",
+              fontWeight: FontWeight.w400,
+            ),
+          )),
+    ),
+                  addCustomTextField(benefit, "Benefits"),
+                  addCustomTextField(keyword, "Puja Keyword"),
+                  addCustomTextField(duration, "Puja Duration"),
+                  addCustomTextField(price, "Puja price"),                
                   const SizedBox(
                     height: 20,
                   ),
@@ -191,10 +212,10 @@ class _AddNewPujaState extends State<AddNewPuja> {
                           contentPadding: EdgeInsets.all(20),
                           title: "Warning",
                           content: Text("Are you sure you want to add ?"),
-                          onConfirm: () {
-                            List<String> names = [];
-                            List<String> description = [];
-                            List<String> benefits = [];
+                          onConfirm: ()async {
+                            List<String> names = await translate(name.text);
+                            List<String> descriptions = await translate(description.text);
+                            List<String> benefits = await translate(benefit.text);
                             List<String> promises = [];
                             List<String> gods = [];
                             for (var element in controller.benefit.value) {
@@ -206,16 +227,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                               if (element['value'] == true) {
                                 gods.add(element['type']);
                               }
-                            }
-                            _name.forEach((element) {
-                              names.add(element.text);
-                            });
-                            _description.forEach((element) {
-                              description.add(element.text);
-                            });
-                            _benifits.forEach((element) {
-                              benefits.add(element.text);
-                            });
+                            }                           
                             Future.delayed(Duration(seconds: 4), () async {
                               await FirebaseFirestore.instance
                                   .doc(
@@ -225,7 +237,7 @@ class _AddNewPujaState extends State<AddNewPuja> {
                                 'puja_ceremony_name':
                                     FieldValue.arrayUnion(names),
                                 'puja_ceremony_description':
-                                    FieldValue.arrayUnion(description),
+                                    FieldValue.arrayUnion(descriptions),
                                 'puja_ceremony_display_picture': image,
                                 'puja_ceremony_god_filter':
                                     FieldValue.arrayUnion(gods),
@@ -297,6 +309,68 @@ class _AddNewPujaState extends State<AddNewPuja> {
             flex: 1,
             child: Column(
               children: [
+                TextButton(onPressed: (){
+                   String sId =
+                      "SID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
+                      TextEditingController newname = TextEditingController();
+                      TextEditingController newdescription =
+                          TextEditingController();
+                      TextEditingController newSamagriPrice =
+                          TextEditingController();
+                      TextEditingController newSamagriMargin = TextEditingController();
+                   Get.bottomSheet(
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: Get.width*0.1),
+                            height: Get.height*0.9,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(                            
+                              children: [
+                                addCustomTextField(newname, "Name"),
+                                addCustomTextField(newdescription, "Description"),
+                                addCustomTextField(newSamagriPrice, "Standard Price"),
+                                addCustomTextField(newSamagriMargin, "Samagri margin"),
+                                  
+
+                                    InkWell(
+                                      onTap: ()async{
+                                       final List<String> names = await translate(newname.text);
+                                       final List<String> description = await translate(newdescription.text);
+                                                                           
+
+                                         await FirebaseFirestore.instance.doc('assets_folder/puja_items_folder/folder/$sId').set({
+                                            'puja_item_description':FieldValue.arrayUnion(description),
+                                            'puja_item_name' :FieldValue.arrayUnion(names),
+                                            'puja_item_price' : newSamagriPrice.text,
+                                            'puja_item_margin': newSamagriMargin.text,
+                                            'puja_item_vendors':[],
+                                            'puja_item_display_picture':'https://i.etsystatic.com/18640148/r/il/89d229/2073623160/il_794xN.2073623160_nq7m.jpg'
+
+                                          });
+
+                                        controller.foundPlayers.update((val) {
+                                          val!.add({
+                                             "id": sId,
+                                            "name": names[1],
+                                            "selected": false,
+                                            "quantity": 'quantity',
+                                            "type" : "deliver"
+                                          });
+                                        });
+                                          Get.back();
+                                          Get.showSnackbar(const GetSnackBar(message: 'Updated samgri',duration: Duration(seconds: 2),));
+                                      },
+                                      child: redButton('Submit'))
+                                      
+                              ],
+                            ),
+                          ),
+                        ),
+                        backgroundColor: context.theme.backgroundColor,
+                        isScrollControlled: true
+                        );
+                }, child: Text("Add New Samagri")),
+                SizedBox(height: 10,),
                 TextField(
                   onChanged: (value) => controller.filterPlayer(value),
                   decoration: const InputDecoration(

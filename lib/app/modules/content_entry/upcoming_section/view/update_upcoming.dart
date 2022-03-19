@@ -7,15 +7,11 @@ import 'package:management/resources/app_components/custom_widgets.dart';
 
 import '../../../../../resources/app_exports.dart';
 import '../../../../../resources/responshive.dart';
-import '../../puja_view/controller/puja_add_controller.dart';
 import '../controller/add_upcoming_controller.dart';
 
 class UpdateUpcoming extends StatefulWidget {
   final String eventId;
    final String image;
-  // final TextEditingController keyword ;
-  // final TextEditingController price;
-  // final TextEditingController duration;
   final String  updateName;
   final  String updateLocation;
   final  int updatePosition;
@@ -33,17 +29,8 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
   @override
   Widget build(BuildContext context) {
     TextEditingController _name =TextEditingController(text:widget.updateName);
-    //addEventTextField(_name, "Upcoming Name");
-
-    TextEditingController _position =TextEditingController(text: '${widget.updatePosition}');
-    //addEventTextField(_position, "Upcoming Position ");
-
+    TextEditingController _position =TextEditingController(text: '${widget.updatePosition}');    
     TextEditingController _location =TextEditingController(text:widget.updateLocation);
-    //addEventTextField(_location, "Upcoming Location ");
-    // TextEditingController keyword = widget.keyword;
-    // TextEditingController price = widget.price;
-    // TextEditingController duration = widget.duration;
-
     return Padding(
       padding: ResponsiveWidget.isSmallScreen(context)
           ? const EdgeInsets.all(0)
@@ -125,28 +112,7 @@ class _UpdateUpcomingState extends State<UpdateUpcoming> {
                           contentPadding: EdgeInsets.all(20),
                           title: "Warning",
                           content: Text("Are you sure you want to remove ?"),
-                          onConfirm: () {
-                            //String names = [];
-                            //String type;
-                            // for (var element in controller.benefit.value) {
-                            //   if(element['value']==true){
-                            //     promises.add(element['type']);
-                            //   }
-                            // }
-                            // for (var element in controller.god.value) {
-                            //   if(element['value']==true){
-                            //     gods.add(element['type']);
-                            //   }
-                            // }
-                            // _name((element) {
-                            //   names.add(_name);
-                            // });
-                            // _description.forEach((element) {
-                            //   description.add(element.text);
-                            // });
-                            // _benifits.forEach((element) {
-                            //   benefits.add(element.text);
-                            // });
+                          onConfirm: () {                          
                             Future.delayed(Duration(seconds: 4), () async{
                               await FirebaseFirestore.instance
                                   .doc(
