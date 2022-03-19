@@ -75,7 +75,10 @@ class BenefitCheckBox extends GetView {
  Widget addCustomTextField(TextEditingController controller, hintText) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: TextFormField(
+      child: TextFormField(   
+        keyboardType: TextInputType.multiline,
+        maxLines: 10,
+        minLines: 1,       
           controller: controller,
           decoration: InputDecoration(
             border: OutlineInputBorder(

@@ -1,54 +1,39 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:management/resources/app_components/custom_widgets.dart';
 
 import '../../../../../resources/app_exports.dart';
+import '../../../../../resources/app_functions.dart';
 import '../controller/add_update_detail_controller.dart';
 
 class AddUpdateDetailView extends StatelessWidget{
+
   AddUpdateDetailController addUpdateDetailController = Get.put(AddUpdateDetailController());
+  
   @override
   Widget build(BuildContext context) {
+    
+      String imageId =
+    "IMID${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}${DateTime.now().second}";
+    
     return Scaffold(
       body: GetX<AddUpdateDetailController>(
         init: AddUpdateDetailController(), 
         initState: AddUpdateDetailController().addBlankText(),       
         builder: (controller) {
-        List<TextEditingController> name1 =
-        List.generate(10, (i) => TextEditingController(text: controller.detailData.value.name1![i]));
-         List<Widget> _name1TextFields = List.generate(
-            10,
-            (index) => addCustomTextField(
-                name1[index], "Name $index"),
-          );
-           List<TextEditingController> date1 =
-        List.generate(10, (i) => TextEditingController(text: controller.detailData.value.date1![i]));
-         List<Widget> _date1TextFields = List.generate(
-            10,
-            (index) => addCustomTextField(
-                name1[index], "Date $index"),
-          );
-           List<TextEditingController> end1 =
-        List.generate(10, (i) => TextEditingController(text: controller.detailData.value.end1![i]));
-         List<Widget> _endTextFields = List.generate(
-            10,
-            (index) => addCustomTextField(
-                name1[index], "End $index"),
-          );
-           List<TextEditingController> begin1 =
-        List.generate(10, (i) => TextEditingController(text: controller.detailData.value.begin1![i]));
-         List<Widget> _beginTextFields = List.generate(
-            10,
-            (index) => addCustomTextField(
-                name1[index], "Begin $index"),
-          );
-           List.generate(10, (i) => TextEditingController(text: controller.detailData.value.vikram1![i]));
-         List<Widget> _vikram1TextFields = List.generate(
-            10,
-            (index) => addCustomTextField(
-                name1[index], "Vikram $index"),
-          );
+          TextEditingController name = TextEditingController();
+          TextEditingController begin = TextEditingController();
+          TextEditingController end = TextEditingController();
+          TextEditingController date = TextEditingController();
+          TextEditingController vikram = TextEditingController();
+          TextEditingController pujaName = TextEditingController();
+          TextEditingController  pujaKeyword = TextEditingController();
+          TextEditingController videoId = TextEditingController();
+          TextEditingController detailKeyword = TextEditingController();
           return  Padding(
             padding:  EdgeInsets.only(left:Get.width*0.05,right: Get.width*0.05,top: Get.height*0.05),
             child: SingleChildScrollView(
@@ -92,7 +77,7 @@ class AddUpdateDetailView extends StatelessWidget{
                             }
                           )),
                   
-                          Expanded(
+                         controller.loader.value?const Center(child: CircularProgressIndicator()):Expanded(
                           flex: 2,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -100,31 +85,134 @@ class AddUpdateDetailView extends StatelessWidget{
                               TextButton(onPressed: (){
                                 
                               }, child: Text("Add new")),
-                               ExpandablePanel(
-                                header: redButton("Add Name"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _name1TextFields)),
+                              Container(
+                    alignment: Alignment.topRight,
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: NetworkImage(controller.image.value)),
+                    ),
+                    child: TextButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text("Alert"),
+                                    content: const Text(
+                                        "Are you sure that you want to update this picture?"),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Cancel")),
+                                      TextButton(
+                                          onPressed: () {
+                                            FileUploadInputElement input =
+                                                FileUploadInputElement()
+                                                  ..accept = 'image/*';
+                                            FirebaseStorage fs =
+                                                FirebaseStorage.instance;
+                                            input.click();
+                                            input.onChange.listen((event) {
+                                              final file = input.files!.first;
+                                              final reader = FileReader();
+                                              reader.readAsDataUrl(file);
+                                              reader.onLoadEnd
+                                                  .listen((event) async {
+                                                var snapshot = await fs
+                                                    .ref(
+                                                        'assets_folder/events_detail_folder')
+                                                    .child('$imageId')
+                                                    .putBlob(file);
+                                                String downloadUrl =
+                                                    await snapshot.ref
+                                                        .getDownloadURL();
+                                            
+                                                  controller.image.value = downloadUrl;
+                                                  
+                                                
+                                              });
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Continue")),
+                                    ],
+                                  ));
+                        },
+                        child: Text("Edit")),
+                  ),
+                              addCustomTextField(name, "Name"),
+                              addCustomTextField(detailKeyword, "Detail keyword"),
+                              addCustomTextField(begin, "begin"),
+                              addCustomTextField(end, "End"),
+                              addCustomTextField(date, "Date"),
+                              addCustomTextField(vikram, "Vikram"),
+                              addCustomTextField(pujaName, "Puja Name"),
+                              addCustomTextField(pujaKeyword, "Puja Keyword"),
+                              addCustomTextField(videoId, "VideoId"),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                TextButton(onPressed: (){
+                                 controller.paragraph.add(TextEditingController(text: "${controller.textControllerIndex.value}"));
+                                  
+                                  controller.form.add(
+                                   addCustomTextField(controller.paragraph[controller.textControllerIndex.value], "Paragraph ${controller.textControllerIndex.value}")
+                                  );
+                                 
+                                  controller.textControllerIndex.value++;
+                                 
+                                 
+                                }, child: Text("Add Paragraph ${ controller.textControllerIndex.value}"))
+                              ],),
+                             ListView(                             
+                              shrinkWrap: true,
+                             children: controller.form,
+                            ),
 
-                                 ExpandablePanel(
-                                header: redButton("Add Date"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _date1TextFields)),
-                                 ExpandablePanel(
-                                header: redButton("Add begin"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _beginTextFields)),
-                                 ExpandablePanel(
-                                header: redButton("Add End"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _endTextFields)),
-                                 ExpandablePanel(
-                                header: redButton("Add Name"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _name1TextFields)),
-                                ExpandablePanel(
-                                header: redButton("Add Vikram"),
-                                collapsed: const SizedBox(),
-                                expanded: Column(children: _vikram1TextFields)),
+                              InkWell(
+                                onTap: ()async{
+                                  List<Map<dynamic,List<String>>> paragraphs = [];
+                                  List<String> englishParagraph = [];
+                                  List<String> name1 =  await translate(name.text);
+                                  List<String> begin1 = await translate(begin.text);
+                                  List<String> end1 =   await translate(end.text);
+                                  List<String> date1 =  await translate(date.text);
+                                  List<String> vikram1 = await translate(vikram.text);
+                                  for (var i=0; i<controller.paragraph.length;i++) {
+                                    List<String> names = await translate(controller.paragraph[i].text);
+                                    paragraphs.add({
+                                      "$i":names
+                                    });
+                                    englishParagraph.add(controller.paragraph[i].text);
+                                  }                                
+                                  Future.delayed(Duration(seconds: 10),()async{
+                                     await FirebaseFirestore.instance.doc("PujaPurohitFiles/commonCollections/deatil/#${detailKeyword.text}").set({
+                                      'data':FieldValue.arrayUnion(paragraphs),
+                                      'name':name.text,
+                                      'name1':FieldValue.arrayUnion(name1),
+                                      'date':date.text,
+                                      'date1':FieldValue.arrayUnion(date1),
+                                      'begin':begin.text,
+                                      'begin1':FieldValue.arrayUnion(begin1),
+                                      'end':end.text,
+                                      'end1':FieldValue.arrayUnion(end1),
+                                      'pujakeyword':pujaKeyword.text,
+                                      'pujaname' : pujaName.text,
+                                      'videoId' : videoId.text,
+                                      'video' : false,
+                                      'deailHindi':[],
+                                      'detailEnglish' : FieldValue.arrayUnion(englishParagraph),
+                                      'image': controller.image.value,
+                                      'detailKeyword':"#${detailKeyword.text}"
+                                    
+                                  });
+                                   
+                                  });
+                                },
+
+                                child: redButton("Submit"))
                                       ],
                                     )),
                                     
@@ -144,4 +232,5 @@ class AddUpdateDetailView extends StatelessWidget{
     );
   }
 
+  
 }
