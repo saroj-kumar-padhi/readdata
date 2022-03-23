@@ -1,0 +1,1 @@
+const appLangs  = 10;
