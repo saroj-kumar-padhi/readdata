@@ -75,38 +75,53 @@ class AddUpdatePuja extends StatelessWidget {
                           }
                           List<Widget> _pujaCards = [];
                           snapshot.data!.docs.forEach((element) {
-                            _pujaCards.add(PujaCards(  
-                            remove: tab=='rp'?true:false,                           
-                            text: element['puja_ceremony_name'][0],
-                            deleteOntap: (){
-                              print("delete called");
-                              FirebaseFirestore.instance.doc('assets_folder/puja_ceremony_folder/folder/${element['puja_ceremony_id']}').delete();
-                            },
-                            iconData:
-                                element['puja_ceremony_display_picture'],
-                            ontap: () {
-                              HomeController homeController = Get.put(HomeController());
-                              homeController.samagriFetch();
-                              homeController.fetchUpdateSamagri(element['puja_ceremony_id']);
-                              homeController.fetchGodBenefit(element['puja_ceremony_id']);                                                           
-                               Get.bottomSheet(                                                                 
-                                 Container(
-                                   padding: const EdgeInsets.only(top: 20),                                                                    
-                                  height: Get.height*0.9,
-                                  child:  UpdatePuja(
-                                    keyword: TextEditingController(text: element['puja_ceremony_keyword']),
-                                    price:  TextEditingController(text: element['puja_ceremony_standard_price']),
-                                    duration:  TextEditingController(text: element['puja_ceremony_standard_duration']),
-                                    pujaId: element['puja_ceremony_id'],
-                                    updateBenefit: element['puja_ceremony_benefits_filter'],
-                                    updateName: element['puja_ceremony_name'],
-                                    updateDescription: element['puja_ceremony_description'],
-                                  )
-                                ),
-                                backgroundColor: context.theme.backgroundColor,
-                                isScrollControlled: true
-                                );
-                            },
+                            _pujaCards.add(PujaCards(
+                              remove: tab == 'rp' ? true : false,
+                              text: element['puja_ceremony_name'][0],
+                              deleteOntap: () {
+                                // showDialog( context: context,
+                                //   builder: (context) => AlertDialog(
+                                Get.dialog(
+                                    FractionallySizedBox(
+                                      heightFactor: 0.05,
+                                      widthFactor: 0.2,
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          FirebaseFirestore.instance
+                                              .doc('assets_folder/puja_ceremony_folder/folder/${element['puja_ceremony_id']}')
+                                              .delete();
+
+                                          print("delete called");
+                                          Get.back();
+                                        },
+                                        child: Text("Confirm"),
+                                      ),
+                                    ),
+                                    useSafeArea: false);
+                              },
+                              iconData: element['puja_ceremony_display_picture'],
+                              ontap: () {
+                                HomeController homeController = Get.put(HomeController());
+                                homeController.samagriFetch();
+                                homeController.fetchUpdateSamagri(element['puja_ceremony_id']);
+                                homeController.fetchGodBenefit(element['puja_ceremony_id']);
+                                Get.bottomSheet(
+                                    Container(
+                                        padding: const EdgeInsets.only(top: 20),
+                                        height: Get.height * 0.9,
+                                        child: UpdatePuja(PujaData(
+                                          element['puja_ceremony_keyword'],
+                                          element['puja_ceremony_standard_price'],
+                                          element['puja_ceremony_standard_duration'],
+                                          element['puja_ceremony_id'],
+                                          element['puja_ceremony_benefits_filter'],
+                                          element['puja_ceremony_name'],
+                                          element['puja_ceremony_description'],
+                                          element['puja_ceremony_display_picture'],
+                                        ))),
+                                    backgroundColor: context.theme.backgroundColor,
+                                    isScrollControlled: true);
+                              },
                             ));
                           });
                           if (tab == 'up' || tab == 'rp') {
