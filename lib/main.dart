@@ -10,6 +10,7 @@ import 'package:system_theme/system_theme.dart';
 import 'app/modules/content_entry/detail_section/view/add_detail_view.dart';
 import 'app/modules/content_entry/puja_section/views/puja_tab.dart';
 import 'app/modules/content_entry/upcoming_section/view/upcoming_tab_view.dart';
+import 'app/modules/content_entry/video_section/video_tab.dart';
 import 'app/modules/home/view/home_view.dart';
 import 'app/modules/management/view/client_users_list.dart';
 import 'app/modules/management/view/pandit_users_list.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
            ),
            GetPage(name: '/samagri', page:()=>SamagriAddDelete()),
             GetPage(name: '/upcoming/:tab', page: ()=>UpcomingTab(),),
+            GetPage(name: '/video/:tab', page: ()=>VideoTab(),),
             GetPage(name: '/detail', page:()=>AddUpdateDetailView()),                    
           ]
           )
