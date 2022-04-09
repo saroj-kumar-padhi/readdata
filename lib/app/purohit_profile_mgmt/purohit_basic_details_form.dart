@@ -11,13 +11,14 @@ class PurohitBasicDetailsForm extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<PurohitBasicDetailsForm> createState() => _PurohitBasicDetailsFormState();
+  State<PurohitBasicDetailsForm> createState() =>
+      _PurohitBasicDetailsFormState();
 }
 
 class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
-  bool updating = false;
+  bool updating = true;
   List<DropdownMenuItem> languageItems = const [
-     DropdownMenuItem(
+    DropdownMenuItem(
       value: 'Hindi',
       child: Text('Hindi'),
     ),
@@ -246,9 +247,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                         ),
                         CustomImageUploader(
                             imageHeight:
-                            MediaQuery.of(context).size.height*0.5,
+                                MediaQuery.of(context).size.height * 0.5,
                             imageWidth:
-                            MediaQuery.of(context).size.height*0.25,
+                                MediaQuery.of(context).size.height * 0.25,
                             networkImageUrl: profile,
                             path:
                                 'Users/${Purohit(widget.documentSnapshot).uid}/profilePicFile',
@@ -267,9 +268,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                         ),
                         CustomImageUploader(
                             imageHeight:
-                            MediaQuery.of(context).size.height*0.5,
+                                MediaQuery.of(context).size.height * 0.5,
                             imageWidth:
-                            MediaQuery.of(context).size.height*0.25,
+                                MediaQuery.of(context).size.height * 0.25,
                             networkImageUrl: cover,
                             path:
                                 'Users/${Purohit(widget.documentSnapshot).uid}/coverPicFile',
@@ -351,7 +352,7 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                         Container(
                           padding: EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                          //    color: Colors.blue,
+                              //    color: Colors.blue,
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
                                   color: Colors.blue,
@@ -502,9 +503,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                               CustomImageUploader(
                                   networkImageUrl: pictures![0],
                                   imageHeight:
-                                  MediaQuery.of(context).size.height*0.5,
+                                      MediaQuery.of(context).size.height * 0.5,
                                   imageWidth:
-                                  MediaQuery.of(context).size.height*0.25,
+                                      MediaQuery.of(context).size.height * 0.25,
                                   path:
                                       'Users/${Purohit(widget.documentSnapshot).uid}/1',
                                   onPressed: (String string) {
@@ -516,9 +517,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                               CustomImageUploader(
                                   networkImageUrl: pictures![1],
                                   imageHeight:
-                                  MediaQuery.of(context).size.height*0.5,
+                                      MediaQuery.of(context).size.height * 0.5,
                                   imageWidth:
-                                  MediaQuery.of(context).size.height*0.25,
+                                      MediaQuery.of(context).size.height * 0.25,
                                   path:
                                       'Users/${Purohit(widget.documentSnapshot).uid}/2',
                                   onPressed: (String string) {
@@ -530,9 +531,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                               CustomImageUploader(
                                   networkImageUrl: pictures![2],
                                   imageHeight:
-                                  MediaQuery.of(context).size.height*0.5,
+                                      MediaQuery.of(context).size.height * 0.5,
                                   imageWidth:
-                                  MediaQuery.of(context).size.height*0.25,
+                                      MediaQuery.of(context).size.height * 0.25,
                                   path:
                                       'Users/${Purohit(widget.documentSnapshot).uid}/3',
                                   onPressed: (String string) {
@@ -544,9 +545,9 @@ class _PurohitBasicDetailsFormState extends State<PurohitBasicDetailsForm> {
                               CustomImageUploader(
                                   networkImageUrl: pictures![3],
                                   imageHeight:
-                                  MediaQuery.of(context).size.height*0.5,
+                                      MediaQuery.of(context).size.height * 0.5,
                                   imageWidth:
-                                  MediaQuery.of(context).size.height*0.25,
+                                      MediaQuery.of(context).size.height * 0.25,
                                   path:
                                       'Users/${Purohit(widget.documentSnapshot).uid}/4',
                                   onPressed: (String string) {
