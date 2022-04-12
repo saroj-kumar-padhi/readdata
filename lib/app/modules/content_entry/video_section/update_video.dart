@@ -11,7 +11,7 @@ import '../../../../../resources/responshive.dart';
 import 'controller/add_video_controller.dart';
 
 class UpdateVideo extends StatefulWidget {
-  final int language;
+  final String language;
   final String puja_key;
   final String  puja_name;
   final  String title;
@@ -71,12 +71,13 @@ class _UpdateVideoState extends State<UpdateVideo> {
                           content: Text("Are you sure you want to remove ?"),
                           onConfirm: () {
                             Future.delayed(Duration(seconds: 4), () async{
+
                               await FirebaseFirestore.instance
                                   .doc(
                                   '/PujaPurohitFiles/all_videos/videos/${video_id.text.trim()}')
                                   .update({
 
-                                'language' : language.text.trim() as int,
+                                'language' : int. parse(language.text.trim()) ,
                                 'puja_key' : puja_key.text.trim(),
                                 'channel_logo' : channel_logo.text.trim(),
                                 'puja_name' : puja_name.text.trim(),
@@ -86,6 +87,23 @@ class _UpdateVideoState extends State<UpdateVideo> {
                                 "live":live.text.trim(),
                                 "timetamp":FieldValue.serverTimestamp(),
                               });
+
+                              await FirebaseFirestore.instance
+                                  .doc(
+                                  '/puja_purohit_tv/live_aarti/${video_id.text.trim()}')
+                                  .update({
+
+                                'language' : int. parse(language.text.trim()) ,
+                                'puja_key' : puja_key.text.trim(),
+                                'channel_logo' : channel_logo.text.trim(),
+                                'puja_name' : puja_name.text.trim(),
+                                'tittle' :tittle.text.trim(),
+                                'video_id' :video_id.text.trim(),
+                                'video_thumbnail':video_thumbnail.text.trim(),
+                                "live":live.text.trim(),
+                                "timetamp":FieldValue.serverTimestamp(),
+                              });
+
                             });
                           },
                           onCancel: () {

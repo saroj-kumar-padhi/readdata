@@ -105,7 +105,7 @@ class VideoTab extends StatelessWidget {
                                         video_thumbnail: element["video_thumbnail"],
                                         puja_key: element["puja_key"],
                                         video_id: element["video_id"],
-                                        language: element["language"],
+                                        language: "${element["language"]}",
                                         puja_name: element["puja_name"],
                                       ),
                                     ),
