@@ -46,30 +46,31 @@ class MyApp extends StatelessWidget {
  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-    GetMaterialApp(     
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Themes.light,
       darkTheme: Themes.dark,
       initialRoute: '/home/${AppStrings.CONTENT_ENTRY}',
       getPages: [
-          GetPage(name: '/home/:tab', page: ()=>HomeView(),
-          children: [
-           GetPage(name: '/client_users', page: ()=>ClientUserList(),           
-           ),
-           GetPage(name: '/pandit_users', page: ()=>PanditUserList(),
-           children: [
-             GetPage(name: '/:id', page: ()=>PanditUserDetails(),)
-           ]
-           ),
-            GetPage(name: '/update_puja/:tab', page: ()=>AddUpdatePuja(),                      
-           ),
-           GetPage(name: '/samagri', page:()=>SamagriAddDelete()),
-            GetPage(name: '/upcoming/:tab', page: ()=>UpcomingTab(),),
-            GetPage(name: '/detail', page:()=>AddUpdateDetailView()),                    
-          ]
-          )
+        GetPage(name: '/home/:tab', page: () => HomeView(),
+            children: [
+              GetPage(name: '/client_users', page: () => ClientUserList(),
+              ),
+              GetPage(name: '/pandit_users', page: () => PanditUserList(),
+                  children: [
+                    GetPage(name: '/:id', page: () => PanditUserDetails(),)
+                  ]
+              ),
+              GetPage(name: '/update_puja/:tab', page: () => AddUpdatePuja(),
+              ),
+              GetPage(name: '/samagri', page: () => SamagriAddDelete()),
+              GetPage(name: '/upcoming/:tab', page: () => UpcomingTab(),),
+              GetPage(name: '/detail', page: () => AddUpdateDetailView()),
+            ]
+        )
       ],
     );
+  }
 }
 
