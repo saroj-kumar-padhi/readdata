@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-    GetMaterialApp(     
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Themes.light,
       darkTheme: Themes.dark,
@@ -73,5 +73,6 @@ class MyApp extends StatelessWidget {
           )
       ],
     );
+  }
 }
 
