@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:management/app/modules/content_entry/samagri_section/view/samagri_add_delete.dart';
 import 'package:management/app/modules/management/view/pandit_user_details.dart';
+import 'package:management/read_data/read_data.dart';
 import 'package:management/resources/app_config.dart';
 import 'package:management/resources/app_strings.dart';
 import 'package:system_theme/system_theme.dart';
@@ -52,8 +53,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: Themes.light,
       darkTheme: Themes.dark,
-      initialRoute: '/home/${AppStrings.CONTENT_ENTRY}',
+      initialRoute: '/read_data',
+      // initialRoute: '/home/${AppStrings.CONTENT_ENTRY}',
       getPages: [
+        GetPage(name: '/read_data', page:()=> ReadData()),
           GetPage(name: '/home/:tab', page: ()=>HomeView(),
           children: [
            GetPage(name: '/client_users', page: ()=>ClientUserList(),           
